@@ -1,0 +1,1679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RealIn — The Honest Feed</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@300,400,500,700,800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --red: #B83232;
+  --cream: #F7F4EF;
+  --cream-dark: #EDE9E2;
+  --ink: #1C1B19;
+  --ink-mid: #4A4843;
+  --ink-faint: #9A9690;
+  --white: #FDFCFA;
+  --border: rgba(28,27,25,0.1);
+  --border-strong: rgba(28,27,25,0.18);
+  --card-shadow: 0 1px 3px rgba(28,27,25,0.06), 0 4px 16px rgba(28,27,25,0.05);
+  --card-shadow-hover: 0 2px 8px rgba(28,27,25,0.1), 0 8px 28px rgba(28,27,25,0.08);
+}
+body {
+  font-family: 'Cabinet Grotesk', system-ui, sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  min-height: 100vh;
+  background-image: radial-gradient(circle, rgba(28,27,25,0.065) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+.topbar {
+  background: rgba(253,252,250,0.9);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 16px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.logo {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  color: var(--ink);
+  flex-shrink: 0;
+}
+.logo em { color: var(--red); font-style: italic; }
+.tagline { font-size: 10px; color: var(--ink-faint); letter-spacing: 0.06em; text-transform: uppercase; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.nav-right { display: flex; gap: 6px; flex-shrink: 0; }
+@media (max-width: 480px) {
+  .tagline { display: none; }
+  .btn:not(.primary) { display: none; }
+  .topbar { padding: 0 14px; }
+}
+.btn {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 13px;
+  padding: 7px 16px;
+  border-radius: 100px;
+  border: 1px solid var(--border-strong);
+  background: none;
+  color: var(--ink-mid);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btn:hover { background: var(--cream-dark); }
+.btn.primary { background: var(--ink); border-color: var(--ink); color: var(--white); }
+.btn.primary:hover { background: #333; }
+.layout { max-width: 620px; margin: 0 auto; padding: 28px 16px 80px; }
+.banner {
+  background: var(--ink);
+  border-radius: 16px;
+  padding: 20px 22px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: relative;
+  overflow: hidden;
+}
+@media (min-width: 480px) {
+  .banner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px 26px;
+  }
+}
+.banner::before {
+  content: '';
+  position: absolute;
+  top: -30px; right: -30px;
+  width: 130px; height: 130px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.06);
+  pointer-events: none;
+}
+.banner::after {
+  content: '';
+  position: absolute;
+  bottom: -40px; left: 30px;
+  width: 90px; height: 90px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.04);
+  pointer-events: none;
+}
+.banner-text { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.6; position: relative; z-index: 1; }
+.banner-text strong { color: rgba(255,255,255,0.95); font-weight: 500; }
+.badge {
+  background: var(--red);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  align-self: flex-start;
+  padding: 5px 12px;
+  border-radius: 100px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+.composer {
+  background: var(--white);
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  box-shadow: var(--card-shadow);
+  padding: 14px 18px;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.comp-av { width: 36px; height: 36px; border-radius: 50%; background: var(--cream-dark); flex-shrink: 0; }
+.comp-input {
+  flex: 1;
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 13px;
+  color: var(--ink-faint);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 9px 18px;
+  background: var(--cream);
+  outline: none;
+}
+.section-label {
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-faint);
+  margin: 22px 0 12px 2px;
+}
+.card {
+  background: var(--white);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  box-shadow: var(--card-shadow);
+  margin-bottom: 14px;
+  overflow: hidden;
+  transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s, opacity 0.55s ease, translate 0.55s ease;
+  opacity: 0;
+  translate: 0 30px;
+}
+.card.visible {
+  opacity: 1;
+  translate: 0 0;
+}
+.card:hover {
+  box-shadow: var(--card-shadow-hover);
+  border-color: var(--border-strong);
+  transform: translateY(-1px);
+}
+.card-header { padding: 18px 20px 12px; display: flex; align-items: flex-start; gap: 12px; }
+.av {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 500;
+  flex-shrink: 0;
+}
+.av-red    { background: #f5e8e8; color: #7a2020; }
+.av-blue   { background: #e5edf8; color: #1e3f6e; }
+.av-green  { background: #e5f0e8; color: #1e5229; }
+.av-purple { background: #eeebfa; color: #3b2b8a; }
+.av-amber  { background: #f7ede0; color: #7a4410; }
+.meta { flex: 1; min-width: 0; }
+.meta-name { font-size: 14px; font-weight: 500; color: var(--ink); }
+.meta-title { font-size: 12px; color: var(--ink-faint); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 300; }
+.meta-time { font-size: 11px; color: var(--ink-faint); margin-top: 3px; font-weight: 300; }
+.card-body { padding: 0 20px 14px; font-size: 14px; line-height: 1.7; color: var(--ink-mid); font-weight: 300; }
+.card-body p + p { margin-top: 9px; }
+
+/* milestone */
+.milestone { margin: 0 20px 14px; border-radius: 12px; border: 1px solid var(--border); overflow: hidden; }
+.ms-top { padding: 16px 18px; display: flex; align-items: center; gap: 14px; background: var(--cream); }
+.ms-icon-wrap {
+  width: 50px; height: 50px;
+  border-radius: 11px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 23px;
+  flex-shrink: 0;
+}
+.ms-content { flex: 1; }
+.ms-label { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-faint); margin-bottom: 4px; }
+.ms-title {  font-size: 15px; font-weight: 800; color: var(--ink); line-height: 1.35; }
+.ms-bottom {
+  padding: 9px 18px;
+  background: var(--cream-dark);
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.ms-sub { font-size: 11px; color: var(--ink-faint); font-weight: 300; }
+.ms-pip { width: 5px; height: 5px; border-radius: 50%; background: var(--ink-faint); opacity: 0.3; }
+
+.tags { display: flex; flex-wrap: wrap; gap: 5px; padding: 0 20px 12px; }
+.tag { font-size: 11px; padding: 3px 10px; border-radius: 100px; border: 1px solid; font-weight: 800; }
+.t-burn { background: #f5e8e8; color: #7a2020; border-color: #e8c8c8; }
+.t-anx  { background: #eeebfa; color: #3b2b8a; border-color: #d0c8f0; }
+.t-tox  { background: #f7ede0; color: #7a4410; border-color: #e8d0b0; }
+.t-real { background: #e5f0e8; color: #1e5229; border-color: #b8d8be; }
+.t-lay  { background: #e5edf8; color: #1e3f6e; border-color: #b8cce8; }
+
+.qrs { display: flex; flex-wrap: wrap; gap: 5px; padding: 0 20px 14px; }
+.qr {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 12px; font-weight: 300;
+  border: 1px solid var(--border-strong);
+  border-radius: 100px;
+  padding: 5px 13px;
+  color: var(--ink-mid);
+  background: none; cursor: pointer;
+  transition: background 0.12s;
+}
+.qr:hover { background: var(--cream); }
+.card-footer {
+  border-top: 1px solid var(--border);
+  padding: 10px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(247,244,239,0.5);
+}
+.reactions { font-size: 12px; color: var(--ink-faint); font-weight: 300; }
+.actions { display: flex; gap: 2px; }
+.act {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 12px; color: var(--ink-faint);
+  background: none; border: none;
+  padding: 5px 10px; border-radius: 8px; cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+.act:hover { background: var(--cream-dark); color: var(--ink-mid); }
+.divider { display: flex; align-items: center; gap: 12px; margin: 6px 0 18px; }
+.divider-line { flex: 1; height: 1px; background: var(--border); }
+.divider-text { font-size: 11px; color: var(--ink-faint); white-space: nowrap; font-size: 12px; font-weight: 400; letter-spacing: 0.02em; }
+
+/* ── INTERACTION ── */
+.act-like.liked { color: var(--red); }
+.like-count { font-variant-numeric: tabular-nums; }
+
+.comment-section { display: none; border-top: 1px solid var(--border); background: rgba(247,244,239,0.5); }
+.comment-section.open { display: block; }
+.comment-list { padding: 10px 20px 0; }
+.comment-item {
+  display: flex; gap: 10px; margin-bottom: 12px; align-items: flex-start;
+}
+.comment-av {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--cream-dark); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 600; color: var(--ink-faint);
+}
+.comment-bubble {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 12px; padding: 8px 12px; font-size: 13px;
+  color: var(--ink-mid); line-height: 1.5; font-weight: 300;
+  flex: 1;
+}
+.comment-input-row {
+  display: flex; gap: 8px; padding: 10px 20px 14px; align-items: center;
+}
+.comment-input {
+  flex: 1; font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 13px; font-weight: 300;
+  border: 1px solid var(--border); border-radius: 100px;
+  padding: 8px 16px; background: var(--white); outline: none;
+  color: var(--ink);
+}
+.comment-input:focus { border-color: var(--border-strong); }
+.comment-submit {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 12px; font-weight: 500;
+  background: var(--ink); color: var(--white);
+  border: none; border-radius: 100px;
+  padding: 7px 14px; cursor: pointer;
+  transition: background 0.15s; flex-shrink: 0;
+}
+.comment-submit:hover { background: #333; }
+
+/* share toast */
+.toast {
+  position: fixed; bottom: 24px; left: 50%; translate: -50% 0;
+  background: var(--ink); color: var(--white);
+  font-size: 13px; font-weight: 400;
+  padding: 10px 20px; border-radius: 100px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.2s, translate 0.2s;
+  z-index: 999;
+}
+.toast.show { opacity: 1; translate: -50% 0; }
+
+/* screenshot mode handled inline */
+
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">Real<span style="color:var(--red)">In</span></div>
+  <div class="tagline">The honest professional network</div>
+  <div class="nav-right">
+    <a href="https://buy.stripe.com/aFa14n6pMguDft44RP9bO0f" target="_blank" class="btn" style="text-decoration:none;">☕ Buy me a coffee</a>
+    <button class="btn primary" onclick="openSubmitForm()">Share your truth</button>
+  </div>
+</div>
+
+<div class="layout">
+
+  <div class="banner">
+    <div class="banner-text">
+      <strong>Welcome to RealIn.</strong> LinkedIn shows the highlight reel.<br>We show the cost of getting there.
+    </div>
+    <div class="badge">No humblebrag zone</div>
+  </div>
+
+  <div class="composer">
+    <div class="comp-av"></div>
+    <input class="comp-input" id="compose-input" placeholder="What's the real story behind your milestone?" readonly style="cursor:pointer;" />
+  </div>
+
+  <div class="section-label">Recent confessions</div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="av av-red">CN</div>
+      <div class="meta">
+        <div class="meta-name">Claire Novak</div>
+        <div class="meta-title">Brand Strategist · making noise in marketing 🌶️</div>
+        <div class="meta-time">5d · 🌐</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <p>I'm happy to announce I have passed my performance review.</p>
+      <p>Overall rating: "Meets Expectations". I have been meeting expectations for 3 years. I have exceeded them for 2. The difference, I've been told, is "visibility".</p>
+      <p>I have learned that visibility means talking louder in meetings, sending emails at 11pm, and saying "great shout" when my manager repeats my idea back to me.</p>
+      <p>I am a very good performer. The performance is exhausting.</p>
+    </div>
+    <div class="milestone">
+      <div class="ms-top">
+        <div class="ms-icon-wrap">🎭</div>
+        <div class="ms-content">
+          <div class="ms-label">Career update</div>
+          <div class="ms-title">Passed performance review. Still performing.</div>
+        </div>
+      </div>
+      <div class="ms-bottom">
+        <div class="ms-sub">193 people are also performing</div>
+        <div class="ms-pip"></div>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag t-burn">#performancereview</span>
+      <span class="tag t-tox">#visibility</span>
+      <span class="tag t-tox">#corporateperformance</span>
+    </div>
+    <div class="qrs">
+      <button class="qr">"Great shout" 💀</button>
+      <button class="qr">Visibility = loudness tax</button>
+      <button class="qr">Meets expectations for 5 years here</button>
+      <button class="qr">The performance IS exhausting</button>
+    </div>
+    <div class="card-footer" data-card="1">
+      <div class="reactions">
+        <span class="reaction-emojis">💀❤️😮</span>
+        <span class="like-count" id="likes-1">193</span>
+        · <span id="comment-count-1">0</span> comments
+      </div>
+      <div class="actions">
+        <button class="act act-like" onclick="toggleLike(1, this)">👍 Relate</button>
+        <button class="act act-comment" onclick="toggleComments(1)">💬 Comment</button>
+        <button class="act act-share" onclick="openShare(1)">↗ Share</button>
+      </div>
+    </div>
+    <div class="comment-section" id="comments-1">
+      <div class="comment-list" id="comment-list-1"></div>
+      <div class="comment-input-row">
+        <div class="comment-av">ME</div>
+        <input class="comment-input" id="comment-input-1" placeholder="Add a comment..." onkeydown="if(event.key==='Enter')submitComment(1)"/>
+        <button class="comment-submit" onclick="submitComment(1)">Post</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="av av-blue">MT</div>
+      <div class="meta">
+        <div class="meta-name">Marcus Teo</div>
+        <div class="meta-title">Engineer · Tech Company</div>
+        <div class="meta-time">2d · 🌐</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <p>Four years. My therapist says I've made "significant progress" separating self-worth from performance scores.</p>
+      <p>My manager says I'm "not quite ready" for senior level.</p>
+      <p>One of us is right.</p>
+    </div>
+    <div class="milestone">
+      <div class="ms-top">
+        <div class="ms-icon-wrap">⏳</div>
+        <div class="ms-content">
+          <div class="ms-label">Work anniversary</div>
+          <div class="ms-title">Marcus completed 4 years managing anxiety at Tech Company</div>
+        </div>
+      </div>
+      <div class="ms-bottom">
+        <div class="ms-sub">Still waiting for that promotion conversation</div>
+        <div class="ms-pip"></div>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag t-anx">#anxiety</span>
+      <span class="tag t-lay">#underpaid</span>
+      <span class="tag t-real">#therapyhelped</span>
+    </div>
+    <div class="qrs">
+      <button class="qr">Congratulations? 🎉</button>
+      <button class="qr">Just leave</button>
+      <button class="qr">Well endured, Marcus 🫂</button>
+      <button class="qr">Counter-offer time</button>
+    </div>
+    <div class="card-footer" data-card="2">
+      <div class="reactions">
+        <span class="reaction-emojis">💀🫂❤️</span>
+        <span class="like-count" id="likes-2">84</span>
+        · <span id="comment-count-2">0</span> comments
+      </div>
+      <div class="actions">
+        <button class="act act-like" onclick="toggleLike(2, this)">👍 Relate</button>
+        <button class="act act-comment" onclick="toggleComments(2)">💬 Comment</button>
+        <button class="act act-share" onclick="openShare(2)">↗ Share</button>
+      </div>
+    </div>
+    <div class="comment-section" id="comments-2">
+      <div class="comment-list" id="comment-list-2"></div>
+      <div class="comment-input-row">
+        <div class="comment-av">ME</div>
+        <input class="comment-input" id="comment-input-2" placeholder="Add a comment..." onkeydown="if(event.key==='Enter')submitComment(2)"/>
+        <button class="comment-submit" onclick="submitComment(2)">Post</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="av av-amber">PS</div>
+      <div class="meta">
+        <div class="meta-name">Priya Sharma</div>
+        <div class="meta-title">Lead UI/UX Designer · SaaS startup</div>
+        <div class="meta-time">4h · 🌐</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <p>Excited to share I was promoted to Lead UI/UX Designer.</p>
+      <p>What they left out: same salary. 40% more responsibility. I now manage two people with zero management training. One of them was passed over for my role and is not thrilled about it.</p>
+      <p>But the title looks incredible on here!</p>
+    </div>
+    <div class="milestone">
+      <div class="ms-top">
+        <div class="ms-icon-wrap">📈</div>
+        <div class="ms-content">
+          <div class="ms-label">Career update</div>
+          <div class="ms-title">New title. Same pay. More problems.</div>
+        </div>
+      </div>
+      <div class="ms-bottom">
+        <div class="ms-sub">23 people are pretending to be happy for you</div>
+        <div class="ms-pip"></div>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag t-burn">#quietpromotion</span>
+      <span class="tag t-tox">#unpaidlabour</span>
+    </div>
+    <div class="qrs">
+      <button class="qr">Negotiate NOW 🔥</button>
+      <button class="qr">Classic quiet promotion</button>
+      <button class="qr">I did this, then quit</button>
+    </div>
+    <div class="card-footer" data-card="3">
+      <div class="reactions">
+        <span class="reaction-emojis">😤💀❤️</span>
+        <span class="like-count" id="likes-3">23</span>
+        · <span id="comment-count-3">0</span> comments
+      </div>
+      <div class="actions">
+        <button class="act act-like" onclick="toggleLike(3, this)">👍 Relate</button>
+        <button class="act act-comment" onclick="toggleComments(3)">💬 Comment</button>
+        <button class="act act-share" onclick="openShare(3)">↗ Share</button>
+      </div>
+    </div>
+    <div class="comment-section" id="comments-3">
+      <div class="comment-list" id="comment-list-3"></div>
+      <div class="comment-input-row">
+        <div class="comment-av">ME</div>
+        <input class="comment-input" id="comment-input-3" placeholder="Add a comment..." onkeydown="if(event.key==='Enter')submitComment(3)"/>
+        <button class="comment-submit" onclick="submitComment(3)">Post</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="av av-green">SC</div>
+      <div class="meta">
+        <div class="meta-name">Sophie Chen</div>
+        <div class="meta-title">Product Manager · FMCG company</div>
+        <div class="meta-time">18h · 🌐</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <p>Delighted to be back from maternity leave and starting an exciting new chapter.</p>
+      <p>My old projects have been "restructured". My desk is gone. Three people have asked if I'm "sure" I want to come back full time.</p>
+      <p>Yes. I'm sure. I also need to pay rent.</p>
+    </div>
+    <div class="milestone">
+      <div class="ms-top">
+        <div class="ms-icon-wrap">🧁</div>
+        <div class="ms-content">
+          <div class="ms-label">Return to work</div>
+          <div class="ms-title">Back from leave. Starting over from scratch.</div>
+        </div>
+      </div>
+      <div class="ms-bottom">
+        <div class="ms-sub">56 people have been exactly here</div>
+        <div class="ms-pip"></div>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag t-tox">#maternitydiscrimination</span>
+      <span class="tag t-anx">#backtowork</span>
+    </div>
+    <div class="qrs">
+      <button class="qr">This is illegal btw</button>
+      <button class="qr">We see you 🫂</button>
+      <button class="qr">Document everything</button>
+    </div>
+    <div class="card-footer" data-card="4">
+      <div class="reactions">
+        <span class="reaction-emojis">🫂❤️💀</span>
+        <span class="like-count" id="likes-4">57</span>
+        · <span id="comment-count-4">0</span> comments
+      </div>
+      <div class="actions">
+        <button class="act act-like" onclick="toggleLike(4, this)">👍 Relate</button>
+        <button class="act act-comment" onclick="toggleComments(4)">💬 Comment</button>
+        <button class="act act-share" onclick="openShare(4)">↗ Share</button>
+      </div>
+    </div>
+    <div class="comment-section" id="comments-4">
+      <div class="comment-list" id="comment-list-4"></div>
+      <div class="comment-input-row">
+        <div class="comment-av">ME</div>
+        <input class="comment-input" id="comment-input-4" placeholder="Add a comment..." onkeydown="if(event.key==='Enter')submitComment(4)"/>
+        <button class="comment-submit" onclick="submitComment(4)">Post</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="av av-purple">DA</div>
+      <div class="meta">
+        <div class="meta-name">Dev Anand</div>
+        <div class="meta-title">Senior UX Designer · Big Tech</div>
+        <div class="meta-time">3d · 🌐</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <p>I'm officially a Mooqler.</p>
+      <p>Six interview rounds. A 20-hour unpaid take-home project. A hiring freeze mid-process. Two rejections before this offer. I cried in more Ubers than I can count.</p>
+      <p>I will tell absolutely no one how much it cost me to get here.</p>
+    </div>
+    <div class="milestone">
+      <div class="ms-top">
+        <div class="ms-icon-wrap">🏳️</div>
+        <div class="ms-content">
+          <div class="ms-label">New position</div>
+          <div class="ms-title">Hired. After 14 months of trying.</div>
+        </div>
+      </div>
+      <div class="ms-bottom">
+        <div class="ms-sub">412 people know this feeling</div>
+        <div class="ms-pip"></div>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag t-lay">#bigtech</span>
+      <span class="tag t-burn">#interviewhell</span>
+      <span class="tag t-tox">#unpaidtakehome</span>
+    </div>
+    <div class="qrs">
+      <button class="qr">Genuinely well done 🙏</button>
+      <button class="qr">The system is broken</button>
+      <button class="qr">Still in round 4 myself 😭</button>
+    </div>
+    <div class="card-footer" data-card="5">
+      <div class="reactions">
+        <span class="reaction-emojis">❤️💀🫂</span>
+        <span class="like-count" id="likes-5">412</span>
+        · <span id="comment-count-5">0</span> comments
+      </div>
+      <div class="actions">
+        <button class="act act-like" onclick="toggleLike(5, this)">👍 Relate</button>
+        <button class="act act-comment" onclick="toggleComments(5)">💬 Comment</button>
+        <button class="act act-share" onclick="openShare(5)">↗ Share</button>
+      </div>
+    </div>
+    <div class="comment-section" id="comments-5">
+      <div class="comment-list" id="comment-list-5"></div>
+      <div class="comment-input-row">
+        <div class="comment-av">ME</div>
+        <input class="comment-input" id="comment-input-5" placeholder="Add a comment..." onkeydown="if(event.key==='Enter')submitComment(5)"/>
+        <button class="comment-submit" onclick="submitComment(5)">Post</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="av av-green">RK</div>
+      <div class="meta">
+        <div class="meta-name">Rachel Kim</div>
+        <div class="meta-title">Open to work · Previously Senior Marketing Manager</div>
+        <div class="meta-time">1d · 🌐</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <p>Thrilled to announce I'm entering my 18th month of unemployment.</p>
+      <p>847 applications sent. 3 replies. 1 interview that ghosted me after the final round. I have rewritten my CV 11 times. I have been told I am "overqualified", "underqualified", and "not quite the right culture fit" — sometimes for the same role.</p>
+      <p>Thriving!</p>
+    </div>
+    <div class="milestone">
+      <div class="ms-top">
+        <div class="ms-icon-wrap">📭</div>
+        <div class="ms-content">
+          <div class="ms-label">Job search update</div>
+          <div class="ms-title">847 applications. 3 replies. Still going.</div>
+        </div>
+      </div>
+      <div class="ms-bottom">
+        <div class="ms-sub">1,204 people are in this exact inbox</div>
+        <div class="ms-pip"></div>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag t-lay">#opentowork</span>
+      <span class="tag t-anx">#ghosted</span>
+      <span class="tag t-burn">#hiringbroken</span>
+    </div>
+    <div class="qrs">
+      <button class="qr">The market is cooked 🔥</button>
+      <button class="qr">DM me, I have a lead</button>
+      <button class="qr">847??? I'm so sorry</button>
+      <button class="qr">Culture fit = we want someone younger</button>
+    </div>
+    <div class="card-footer" data-card="6">
+      <div class="reactions">
+        <span class="reaction-emojis">🫂💀❤️</span>
+        <span class="like-count" id="likes-6">1200</span>
+        · <span id="comment-count-6">0</span> comments
+      </div>
+      <div class="actions">
+        <button class="act act-like" onclick="toggleLike(6, this)">👍 Relate</button>
+        <button class="act act-comment" onclick="toggleComments(6)">💬 Comment</button>
+        <button class="act act-share" onclick="openShare(6)">↗ Share</button>
+      </div>
+    </div>
+    <div class="comment-section" id="comments-6">
+      <div class="comment-list" id="comment-list-6"></div>
+      <div class="comment-input-row">
+        <div class="comment-av">ME</div>
+        <input class="comment-input" id="comment-input-6" placeholder="Add a comment..." onkeydown="if(event.key==='Enter')submitComment(6)"/>
+        <button class="comment-submit" onclick="submitComment(6)">Post</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="av av-amber">BL</div>
+      <div class="meta">
+        <div class="meta-name">Ben Lawson</div>
+        <div class="meta-title">Seeking opportunities · Ex-Operations Lead</div>
+        <div class="meta-time">6h · 🌐</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <p>Thrilled to announce I have been laid off for the third time in 18 months.</p>
+      <p>January 2023: "organisational restructure". August 2023: "strategic realignment". Last week: "evolving business priorities".</p>
+      <p>Three companies. Three all-hands Zoom calls. Three times I was told it was "nothing personal" by someone who did not know my name.</p>
+      <p>I have started rating restructures the way people rate Ubers. This last one gets 3 stars — at least they gave me two weeks notice.</p>
+    </div>
+    <div class="milestone">
+      <div class="ms-top">
+        <div class="ms-icon-wrap">🏗️</div>
+        <div class="ms-content">
+          <div class="ms-label">Career update</div>
+          <div class="ms-title">Laid off 3 times in 18 months. All "restructures".</div>
+        </div>
+      </div>
+      <div class="ms-bottom">
+        <div class="ms-sub">It was never personal. It was also always personal.</div>
+        <div class="ms-pip"></div>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag t-lay">#layoff</span>
+      <span class="tag t-tox">#restructure</span>
+      <span class="tag t-anx">#opentowork</span>
+      <span class="tag t-burn">#corporatespeak</span>
+    </div>
+    <div class="qrs">
+      <button class="qr">3 stars is generous 😂</button>
+      <button class="qr">Same. Twice for me so far.</button>
+      <button class="qr">"Nothing personal" 🙃</button>
+      <button class="qr">DM me, I have a lead</button>
+    </div>
+    <div class="card-footer" data-card="7">
+      <div class="reactions">
+        <span class="reaction-emojis">💀😤🫂</span>
+        <span class="like-count" id="likes-7">1800</span>
+        · <span id="comment-count-7">0</span> comments
+      </div>
+      <div class="actions">
+        <button class="act act-like" onclick="toggleLike(7, this)">👍 Relate</button>
+        <button class="act act-comment" onclick="toggleComments(7)">💬 Comment</button>
+        <button class="act act-share" onclick="openShare(7)">↗ Share</button>
+      </div>
+    </div>
+    <div class="comment-section" id="comments-7">
+      <div class="comment-list" id="comment-list-7"></div>
+      <div class="comment-input-row">
+        <div class="comment-av">ME</div>
+        <input class="comment-input" id="comment-input-7" placeholder="Add a comment..." onkeydown="if(event.key==='Enter')submitComment(7)"/>
+        <button class="comment-submit" onclick="submitComment(7)">Post</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="av av-green">LH</div>
+      <div class="meta">
+        <div class="meta-name">Lena Hart</div>
+        <div class="meta-title">People &amp; Culture Manager · RetailCo</div>
+        <div class="meta-time">1d · 🌐</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <p>Excited to share I've completed my 4th mandatory Mental Health Day this year.</p>
+      <p>I spent it answering emails. My manager sent three of them. One was marked urgent. It was not urgent.</p>
+      <p>Looking forward to my 5th.</p>
+    </div>
+    <div class="milestone">
+      <div class="ms-top">
+        <div class="ms-icon-wrap">🧘</div>
+        <div class="ms-content">
+          <div class="ms-label">Wellness update</div>
+          <div class="ms-title">Completed mandatory self-care. Answered 11 emails doing it.</div>
+        </div>
+      </div>
+      <div class="ms-bottom">
+        <div class="ms-sub">3,847 people took their laptop to their wellness day</div>
+        <div class="ms-pip"></div>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag t-burn">#burnout</span>
+      <span class="tag t-tox">#mentalhealthwashing</span>
+    </div>
+    <div class="qrs">
+      <button class="qr">This is not a day off 😤</button>
+      <button class="qr">I did this last Friday</button>
+      <button class="qr">Mark the email low priority back</button>
+    </div>
+    <div class="card-footer" data-card="8">
+      <div class="reactions">
+        <span class="reaction-emojis">💀😤❤️</span>
+        <span class="like-count" id="likes-8">2100</span>
+        · <span id="comment-count-8">0</span> comments
+      </div>
+      <div class="actions">
+        <button class="act act-like" onclick="toggleLike(8, this)">👍 Relate</button>
+        <button class="act act-comment" onclick="toggleComments(8)">💬 Comment</button>
+        <button class="act act-share" onclick="openShare(8)">↗ Share</button>
+      </div>
+    </div>
+    <div class="comment-section" id="comments-8">
+      <div class="comment-list" id="comment-list-8"></div>
+      <div class="comment-input-row">
+        <div class="comment-av">ME</div>
+        <input class="comment-input" id="comment-input-8" placeholder="Add a comment..." onkeydown="if(event.key==='Enter')submitComment(8)"/>
+        <button class="comment-submit" onclick="submitComment(8)">Post</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="av av-red">OB</div>
+      <div class="meta">
+        <div class="meta-name">Oliver Banks</div>
+        <div class="meta-title">Head of Efficiency · GlobalCorp</div>
+        <div class="meta-time">3h · 🌐</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <p>Thrilled to announce I've been asked to "do more with less" for the 6th consecutive year.</p>
+      <p>Less is now nothing. We are doing things with nothing. I have written a 14-slide deck explaining how we will do things with nothing. The deck required 3 rounds of revisions. It is a very good deck about nothing.</p>
+    </div>
+    <div class="milestone">
+      <div class="ms-top">
+        <div class="ms-icon-wrap">📉</div>
+        <div class="ms-content">
+          <div class="ms-label">Resource update</div>
+          <div class="ms-title">Year 6 of doing more with less. Less is now nothing.</div>
+        </div>
+      </div>
+      <div class="ms-bottom">
+        <div class="ms-sub">We have always been doing things with nothing</div>
+        <div class="ms-pip"></div>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag t-tox">#doingmorewithless</span>
+      <span class="tag t-burn">#resourced</span>
+    </div>
+    <div class="qrs">
+      <button class="qr">The deck sounds incredible 😂</button>
+      <button class="qr">Year 4 here, solidarity</button>
+      <button class="qr">What's in slide 7?</button>
+    </div>
+    <div class="card-footer" data-card="9">
+      <div class="reactions">
+        <span class="reaction-emojis">💀😭❤️</span>
+        <span class="like-count" id="likes-9">4400</span>
+        · <span id="comment-count-9">0</span> comments
+      </div>
+      <div class="actions">
+        <button class="act act-like" onclick="toggleLike(9, this)">👍 Relate</button>
+        <button class="act act-comment" onclick="toggleComments(9)">💬 Comment</button>
+        <button class="act act-share" onclick="openShare(9)">↗ Share</button>
+      </div>
+    </div>
+    <div class="comment-section" id="comments-9">
+      <div class="comment-list" id="comment-list-9"></div>
+      <div class="comment-input-row">
+        <div class="comment-av">ME</div>
+        <input class="comment-input" id="comment-input-9" placeholder="Add a comment..." onkeydown="if(event.key==='Enter')submitComment(9)"/>
+        <button class="comment-submit" onclick="submitComment(9)">Post</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="av av-purple">AM</div>
+      <div class="meta">
+        <div class="meta-name">Aisha Mensah</div>
+        <div class="meta-title">Senior Analyst · FinanceCo</div>
+        <div class="meta-time">2d · 🌐</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <p>Happy to share I gave honest feedback in our anonymous employee survey.</p>
+      <p>I have since been called into three separate meetings. My manager has "some questions". HR would like to "touch base". My skip-level wants to "open a dialogue".</p>
+      <p>The survey was anonymous.</p>
+    </div>
+    <div class="milestone">
+      <div class="ms-top">
+        <div class="ms-icon-wrap">📋</div>
+        <div class="ms-content">
+          <div class="ms-label">Engagement update</div>
+          <div class="ms-title">Gave honest feedback. Now in 3 meetings about it.</div>
+        </div>
+      </div>
+      <div class="ms-bottom">
+        <div class="ms-sub">The survey was anonymous. The survey was not anonymous.</div>
+        <div class="ms-pip"></div>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag t-tox">#anonymous</span>
+      <span class="tag t-anx">#surveyed</span>
+    </div>
+    <div class="qrs">
+      <button class="qr">Classic 🙃</button>
+      <button class="qr">Never again</button>
+      <button class="qr">What did you say???</button>
+    </div>
+    <div class="card-footer" data-card="10">
+      <div class="reactions">
+        <span class="reaction-emojis">💀😤🫂</span>
+        <span class="like-count" id="likes-10">5200</span>
+        · <span id="comment-count-10">0</span> comments
+      </div>
+      <div class="actions">
+        <button class="act act-like" onclick="toggleLike(10, this)">👍 Relate</button>
+        <button class="act act-comment" onclick="toggleComments(10)">💬 Comment</button>
+        <button class="act act-share" onclick="openShare(10)">↗ Share</button>
+      </div>
+    </div>
+    <div class="comment-section" id="comments-10">
+      <div class="comment-list" id="comment-list-10"></div>
+      <div class="comment-input-row">
+        <div class="comment-av">ME</div>
+        <input class="comment-input" id="comment-input-10" placeholder="Add a comment..." onkeydown="if(event.key==='Enter')submitComment(10)"/>
+        <button class="comment-submit" onclick="submitComment(10)">Post</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="av av-blue">JF</div>
+      <div class="meta">
+        <div class="meta-name">James Fuller</div>
+        <div class="meta-title">Open to work · Ex-Digital Marketing Lead</div>
+        <div class="meta-time">5d · 🌐</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <p>Delighted to share I have a second interview for a role that pays less than my last job, has fewer benefits, and requires "startup energy".</p>
+      <p>I've learned that startup energy means unpaid overtime, an office with a ping pong table that nobody uses, and a Slack channel called #wins where the founders post their own tweets.</p>
+      <p>I am going to the interview.</p>
+    </div>
+    <div class="milestone">
+      <div class="ms-top">
+        <div class="ms-icon-wrap">🏓</div>
+        <div class="ms-content">
+          <div class="ms-label">Job search update</div>
+          <div class="ms-title">Second interview. Less pay. Ping pong table.</div>
+        </div>
+      </div>
+      <div class="ms-bottom">
+        <div class="ms-sub">Nobody has ever used the ping pong table</div>
+        <div class="ms-pip"></div>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag t-tox">#startupenergy</span>
+      <span class="tag t-lay">#opentowork</span>
+      <span class="tag t-burn">#unpaidovertime</span>
+    </div>
+    <div class="qrs">
+      <button class="qr">Don't do it 😭</button>
+      <button class="qr">The #wins channel is sending me</button>
+      <button class="qr">Negotiate before you go in</button>
+    </div>
+    <div class="card-footer" data-card="11">
+      <div class="reactions">
+        <span class="reaction-emojis">💀😂🫂</span>
+        <span class="like-count" id="likes-11">1600</span>
+        · <span id="comment-count-11">0</span> comments
+      </div>
+      <div class="actions">
+        <button class="act act-like" onclick="toggleLike(11, this)">👍 Relate</button>
+        <button class="act act-comment" onclick="toggleComments(11)">💬 Comment</button>
+        <button class="act act-share" onclick="openShare(11)">↗ Share</button>
+      </div>
+    </div>
+    <div class="comment-section" id="comments-11">
+      <div class="comment-list" id="comment-list-11"></div>
+      <div class="comment-input-row">
+        <div class="comment-av">ME</div>
+        <input class="comment-input" id="comment-input-11" placeholder="Add a comment..." onkeydown="if(event.key==='Enter')submitComment(11)"/>
+        <button class="comment-submit" onclick="submitComment(11)">Post</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="av av-amber">KO</div>
+      <div class="meta">
+        <div class="meta-name">Kieran O'Sullivan</div>
+        <div class="meta-title">Open to work · Previously nothing for 18 months</div>
+        <div class="meta-time">1d · 🌐</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <p>Excited to share I've been "kept on file" by 47 companies.</p>
+      <p>I am no one's file. I have never heard from any of them again. I have searched my inbox. I have checked spam. I am in 47 files and I am in none of them.</p>
+    </div>
+    <div class="milestone">
+      <div class="ms-top">
+        <div class="ms-icon-wrap">🗂️</div>
+        <div class="ms-content">
+          <div class="ms-label">Job search update</div>
+          <div class="ms-title">Kept on file by 47 companies. Called back by zero.</div>
+        </div>
+      </div>
+      <div class="ms-bottom">
+        <div class="ms-sub">I am in 47 files. I am in none of them.</div>
+        <div class="ms-pip"></div>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag t-lay">#keptonfile</span>
+      <span class="tag t-anx">#ghosted</span>
+    </div>
+    <div class="qrs">
+      <button class="qr">I am also a file 🗂️</button>
+      <button class="qr">File means no</button>
+      <button class="qr">DM me, I have a real lead</button>
+    </div>
+    <div class="card-footer" data-card="12">
+      <div class="reactions">
+        <span class="reaction-emojis">💀😭❤️</span>
+        <span class="like-count" id="likes-12">3300</span>
+        · <span id="comment-count-12">0</span> comments
+      </div>
+      <div class="actions">
+        <button class="act act-like" onclick="toggleLike(12, this)">👍 Relate</button>
+        <button class="act act-comment" onclick="toggleComments(12)">💬 Comment</button>
+        <button class="act act-share" onclick="openShare(12)">↗ Share</button>
+      </div>
+    </div>
+    <div class="comment-section" id="comments-12">
+      <div class="comment-list" id="comment-list-12"></div>
+      <div class="comment-input-row">
+        <div class="comment-av">ME</div>
+        <input class="comment-input" id="comment-input-12" placeholder="Add a comment..." onkeydown="if(event.key==='Enter')submitComment(12)"/>
+        <button class="comment-submit" onclick="submitComment(12)">Post</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="av av-red">TN</div>
+      <div class="meta">
+        <div class="meta-name">Tom Nguyen</div>
+        <div class="meta-title">Senior Engineer · ScaleUp Ltd</div>
+        <div class="meta-time">6h · 🌐</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <p>I've been at this company 6 years. A new hire doing my job starts next Monday.</p>
+      <p>His salary is 30% higher than mine. I know this because he told me at lunch on his first day. He seemed embarrassed. I told him not to be. He did nothing wrong. I have since updated my CV.</p>
+      <p>We have been introduced. He seems nice.</p>
+    </div>
+    <div class="milestone">
+      <div class="ms-top">
+        <div class="ms-icon-wrap">👥</div>
+        <div class="ms-content">
+          <div class="ms-label">Team update</div>
+          <div class="ms-title">6 years loyal. New hire earns 30% more. CV updated.</div>
+        </div>
+      </div>
+      <div class="ms-bottom">
+        <div class="ms-sub">Loyalty is not a compensation strategy</div>
+        <div class="ms-pip"></div>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag t-tox">#loyaltytax</span>
+      <span class="tag t-lay">#underpaid</span>
+      <span class="tag t-burn">#6years</span>
+    </div>
+    <div class="qrs">
+      <button class="qr">Leave. Now. 🔥</button>
+      <button class="qr">"He seems nice" is devastating</button>
+      <button class="qr">This is why you job hop</button>
+      <button class="qr">I hope the CV update went well</button>
+    </div>
+    <div class="card-footer" data-card="13">
+      <div class="reactions">
+        <span class="reaction-emojis">😤💀❤️</span>
+        <span class="like-count" id="likes-13">7800</span>
+        · <span id="comment-count-13">0</span> comments
+      </div>
+      <div class="actions">
+        <button class="act act-like" onclick="toggleLike(13, this)">👍 Relate</button>
+        <button class="act act-comment" onclick="toggleComments(13)">💬 Comment</button>
+        <button class="act act-share" onclick="openShare(13)">↗ Share</button>
+      </div>
+    </div>
+    <div class="comment-section" id="comments-13">
+      <div class="comment-list" id="comment-list-13"></div>
+      <div class="comment-input-row">
+        <div class="comment-av">ME</div>
+        <input class="comment-input" id="comment-input-13" placeholder="Add a comment..." onkeydown="if(event.key==='Enter')submitComment(13)"/>
+        <button class="comment-submit" onclick="submitComment(13)">Post</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="av av-green">FR</div>
+      <div class="meta">
+        <div class="meta-name">Fatima Rashid</div>
+        <div class="meta-title">Programme Manager · ConsultingGroup</div>
+        <div class="meta-time">4d · 🌐</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <p>Pleased to announce I have perfected the art of looking busy on a call while being completely checked out.</p>
+      <p>Four years of practice. I nod at 12-second intervals. I type occasionally — it is the same sentence, deleted and retyped. I have never been caught. I am very tired.</p>
+    </div>
+    <div class="milestone">
+      <div class="ms-top">
+        <div class="ms-icon-wrap">🎭</div>
+        <div class="ms-content">
+          <div class="ms-label">Professional milestone</div>
+          <div class="ms-title">4 years of looking engaged. Have not been engaged.</div>
+        </div>
+      </div>
+      <div class="ms-bottom">
+        <div class="ms-sub">The 12-second nod is undefeated</div>
+        <div class="ms-pip"></div>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag t-burn">#quietquitting</span>
+      <span class="tag t-tox">#meetingculture</span>
+    </div>
+    <div class="qrs">
+      <button class="qr">The 12-second nod 😂</button>
+      <button class="qr">I also have a decoy sentence</button>
+      <button class="qr">This call could have been an email</button>
+    </div>
+    <div class="card-footer" data-card="14">
+      <div class="reactions">
+        <span class="reaction-emojis">😂💀❤️</span>
+        <span class="like-count" id="likes-14">9100</span>
+        · <span id="comment-count-14">0</span> comments
+      </div>
+      <div class="actions">
+        <button class="act act-like" onclick="toggleLike(14, this)">👍 Relate</button>
+        <button class="act act-comment" onclick="toggleComments(14)">💬 Comment</button>
+        <button class="act act-share" onclick="openShare(14)">↗ Share</button>
+      </div>
+    </div>
+    <div class="comment-section" id="comments-14">
+      <div class="comment-list" id="comment-list-14"></div>
+      <div class="comment-input-row">
+        <div class="comment-av">ME</div>
+        <input class="comment-input" id="comment-input-14" placeholder="Add a comment..." onkeydown="if(event.key==='Enter')submitComment(14)"/>
+        <button class="comment-submit" onclick="submitComment(14)">Post</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="av av-blue">CW</div>
+      <div class="meta">
+        <div class="meta-name">Clara Webb</div>
+        <div class="meta-title">VP of People · TechVentures</div>
+        <div class="meta-time">2d · 🌐</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <p>Our CEO just announced we're "doubling down on our people-first culture".</p>
+      <p>This is two weeks after the third round of layoffs this year. The announcement was made on a Friday at 4:45pm. There was a slide with a sunrise on it. The slide said "our people are our greatest asset". 34 of our greatest assets were let go that morning.</p>
+    </div>
+    <div class="milestone">
+      <div class="ms-top">
+        <div class="ms-icon-wrap">🌅</div>
+        <div class="ms-content">
+          <div class="ms-label">Culture update</div>
+          <div class="ms-title">People-first announcement. Third layoff this year.</div>
+        </div>
+      </div>
+      <div class="ms-bottom">
+        <div class="ms-sub">The sunrise slide was very beautiful</div>
+        <div class="ms-pip"></div>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag t-tox">#peoplefirst</span>
+      <span class="tag t-lay">#layoff</span>
+      <span class="tag t-burn">#corporatespeak</span>
+    </div>
+    <div class="qrs">
+      <button class="qr">Friday 4:45pm is a war crime</button>
+      <button class="qr">The sunrise slide 💀</button>
+      <button class="qr">Greatest assets deserve severance</button>
+    </div>
+    <div class="card-footer" data-card="15">
+      <div class="reactions">
+        <span class="reaction-emojis">😤💀😮</span>
+        <span class="like-count" id="likes-15">6600</span>
+        · <span id="comment-count-15">0</span> comments
+      </div>
+      <div class="actions">
+        <button class="act act-like" onclick="toggleLike(15, this)">👍 Relate</button>
+        <button class="act act-comment" onclick="toggleComments(15)">💬 Comment</button>
+        <button class="act act-share" onclick="openShare(15)">↗ Share</button>
+      </div>
+    </div>
+    <div class="comment-section" id="comments-15">
+      <div class="comment-list" id="comment-list-15"></div>
+      <div class="comment-input-row">
+        <div class="comment-av">ME</div>
+        <input class="comment-input" id="comment-input-15" placeholder="Add a comment..." onkeydown="if(event.key==='Enter')submitComment(15)"/>
+        <button class="comment-submit" onclick="submitComment(15)">Post</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="av av-purple">MK</div>
+      <div class="meta">
+        <div class="meta-name">Maya Kowalski</div>
+        <div class="meta-title">Product Lead · SoftwareCo</div>
+        <div class="meta-time">8h · 🌐</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <p>I've been told my role is being "sunset".</p>
+      <p>Not cut. Not eliminated. Sunset. As if I'm a feature. As if I'm a legacy integration they've finally decided to deprecate. As if my seven years here are a technical debt they've chosen to write off.</p>
+      <p>I've been sunset. I'm going for a walk.</p>
+    </div>
+    <div class="milestone">
+      <div class="ms-top">
+        <div class="ms-icon-wrap">🌇</div>
+        <div class="ms-content">
+          <div class="ms-label">Role update</div>
+          <div class="ms-title">Not fired. Sunset. After 7 years.</div>
+        </div>
+      </div>
+      <div class="ms-bottom">
+        <div class="ms-sub">I am a legacy integration they have chosen to deprecate</div>
+        <div class="ms-pip"></div>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag t-lay">#sunset</span>
+      <span class="tag t-tox">#corporatespeak</span>
+      <span class="tag t-burn">#deprecated</span>
+    </div>
+    <div class="qrs">
+      <button class="qr">"Sunset" is unhinged 💀</button>
+      <button class="qr">You are not a legacy integration</button>
+      <button class="qr">Enjoy the walk. Then lawyer up.</button>
+    </div>
+    <div class="card-footer" data-card="16">
+      <div class="reactions">
+        <span class="reaction-emojis">💀😤🫂</span>
+        <span class="like-count" id="likes-16">8300</span>
+        · <span id="comment-count-16">0</span> comments
+      </div>
+      <div class="actions">
+        <button class="act act-like" onclick="toggleLike(16, this)">👍 Relate</button>
+        <button class="act act-comment" onclick="toggleComments(16)">💬 Comment</button>
+        <button class="act act-share" onclick="openShare(16)">↗ Share</button>
+      </div>
+    </div>
+    <div class="comment-section" id="comments-16">
+      <div class="comment-list" id="comment-list-16"></div>
+      <div class="comment-input-row">
+        <div class="comment-av">ME</div>
+        <input class="comment-input" id="comment-input-16" placeholder="Add a comment..." onkeydown="if(event.key==='Enter')submitComment(16)"/>
+        <button class="comment-submit" onclick="submitComment(16)">Post</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-text">and one that ended differently</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="av av-purple">NW</div>
+      <div class="meta">
+        <div class="meta-name">Nina Walsh</div>
+        <div class="meta-title">Freelance Consultant · Previously nothing for 2 years</div>
+        <div class="meta-time">3d · 🌐</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <p>I was unemployed for 2 years. Today I turned down a job offer.</p>
+      <p>Not because it wasn't good enough. Because I finally know what I'm worth — and it wasn't in that offer. Two years ago I would have said yes before they finished the sentence.</p>
+      <p>I don't know when the right thing comes. But I know I'm done saying yes to the wrong ones.</p>
+    </div>
+    <div class="milestone">
+      <div class="ms-top">
+        <div class="ms-icon-wrap">🌱</div>
+        <div class="ms-content">
+          <div class="ms-label">Real growth</div>
+          <div class="ms-title">Unemployed for 2 years. Finally know my worth.</div>
+        </div>
+      </div>
+      <div class="ms-bottom">
+        <div class="ms-sub">847 people needed to hear this today</div>
+        <div class="ms-pip"></div>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag t-real">#selfworth</span>
+      <span class="tag t-real">#ittakestime</span>
+      <span class="tag t-lay">#opentotherightthing</span>
+    </div>
+    <div class="qrs">
+      <button class="qr">This made me cry 🫂</button>
+      <button class="qr">How did you survive financially?</button>
+      <button class="qr">I needed this today</button>
+      <button class="qr">Saving this post forever</button>
+    </div>
+    <div class="card-footer" data-card="17">
+      <div class="reactions">
+        <span class="reaction-emojis">❤️🌱🫂</span>
+        <span class="like-count" id="likes-17">2400</span>
+        · <span id="comment-count-17">0</span> comments
+      </div>
+      <div class="actions">
+        <button class="act act-like" onclick="toggleLike(17, this)">👍 Relate</button>
+        <button class="act act-comment" onclick="toggleComments(17)">💬 Comment</button>
+        <button class="act act-share" onclick="openShare(17)">↗ Share</button>
+      </div>
+    </div>
+    <div class="comment-section" id="comments-17">
+      <div class="comment-list" id="comment-list-17"></div>
+      <div class="comment-input-row">
+        <div class="comment-av">ME</div>
+        <input class="comment-input" id="comment-input-17" placeholder="Add a comment..." onkeydown="if(event.key==='Enter')submitComment(17)"/>
+        <button class="comment-submit" onclick="submitComment(17)">Post</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<div class="toast" id="toast">Copied!</div>
+
+</div>
+
+<div style="text-align:center;padding:40px 20px 60px;border-top:1px solid rgba(28,27,25,0.08);background:rgba(247,244,239,0.6);">
+  <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:15px;font-weight:800;color:#1C1B19;margin-bottom:10px;letter-spacing:-0.3px;">Real<span style="color:#B83232;">In</span></div>
+  <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:12px;color:#9A9690;line-height:1.8;margin-bottom:20px;max-width:340px;margin-left:auto;margin-right:auto;">
+    All characters, companies, and situations depicted are entirely fictional. Any resemblance to real persons or workplaces is purely coincidental — and deeply unsurprising.
+  </div>
+  <div style="display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;">
+    <a href="https://ux-circles.com" target="_blank" style="font-family:'Cabinet Grotesk',sans-serif;display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#9A9690;text-decoration:none;border:1px solid rgba(28,27,25,0.15);border-radius:100px;padding:8px 16px;">
+      Made by UX CIRCLES
+    </a>
+    <a href="https://buy.stripe.com/aFa14n6pMguDft44RP9bO0f" target="_blank" style="font-family:'Cabinet Grotesk',sans-serif;display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#7a4410;text-decoration:none;background:#fef0d9;border:1px solid #e8d0b0;border-radius:100px;padding:8px 16px;">
+      ☕ Buy me a coffee
+    </a>
+  </div>
+</div>
+
+
+<!-- Submission form modal -->
+<div id="submit-overlay" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(28,27,25,0.5);align-items:center;justify-content:center;padding:20px;" onclick="closeSubmitForm(event)">
+  <div style="background:#FDFCFA;border-radius:20px;padding:28px 24px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;">
+    <div style="margin-bottom:20px;">
+      <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:18px;font-weight:700;color:#1C1B19;margin-bottom:6px;">Share your truth</div>
+      <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:13px;color:#9A9690;line-height:1.6;">Your story will be anonymised before publishing. We'll rewrite it to protect your identity — but keep the truth intact.</div>
+    </div>
+
+    <form id="submit-form" action="https://formspree.io/f/xlgaokaz" method="POST">
+      <div style="margin-bottom:16px;">
+        <label style="font-family:'Cabinet Grotesk',sans-serif;font-size:12px;font-weight:500;color:#4A4843;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:6px;">Your story *</label>
+        <textarea name="story" required placeholder="What's the real story behind your milestone? The promotion with no raise. The 18 months nobody knows about. The thing you'd never post on LinkedIn." style="font-family:'Cabinet Grotesk',sans-serif;width:100%;min-height:140px;border:1px solid #E8E6E2;border-radius:12px;padding:12px 14px;font-size:14px;color:#1C1B19;background:#F7F4EF;outline:none;resize:vertical;line-height:1.6;"></textarea>
+      </div>
+
+      <div style="margin-bottom:16px;">
+        <label style="font-family:'Cabinet Grotesk',sans-serif;font-size:12px;font-weight:500;color:#4A4843;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:6px;">Context <span style="color:#9A9690;font-weight:400;text-transform:none;letter-spacing:0;">(optional)</span></label>
+        <input name="context" type="text" placeholder="e.g. 6 years in tech, mid-level manager, London" style="font-family:'Cabinet Grotesk',sans-serif;width:100%;border:1px solid #E8E6E2;border-radius:12px;padding:10px 14px;font-size:14px;color:#1C1B19;background:#F7F4EF;outline:none;" />
+      </div>
+
+      <div style="margin-bottom:24px;">
+        <label style="font-family:'Cabinet Grotesk',sans-serif;font-size:12px;font-weight:500;color:#4A4843;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:6px;">Your name <span style="color:#9A9690;font-weight:400;text-transform:none;letter-spacing:0;">(optional — won't be published)</span></label>
+        <input name="name" type="text" placeholder="Only used to reply to you if needed" style="font-family:'Cabinet Grotesk',sans-serif;width:100%;border:1px solid #E8E6E2;border-radius:12px;padding:10px 14px;font-size:14px;color:#1C1B19;background:#F7F4EF;outline:none;" />
+      </div>
+
+      <div style="background:#F7F4EF;border-radius:10px;padding:12px 14px;margin-bottom:20px;display:flex;gap:10px;align-items:flex-start;">
+        <span style="font-size:16px;flex-shrink:0;">🔒</span>
+        <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:12px;color:#9A9690;line-height:1.6;">Your submission is anonymous. We'll rewrite names, companies, and identifying details before publishing. You'll be in good company.</div>
+      </div>
+
+      <div style="display:flex;gap:10px;">
+        <button type="button" onclick="closeSubmitFormDirect()" style="font-family:'Cabinet Grotesk',sans-serif;flex:1;font-size:13px;font-weight:500;background:none;border:1px solid #E8E6E2;border-radius:100px;padding:11px;cursor:pointer;color:#4A4843;">Cancel</button>
+        <button type="submit" style="font-family:'Cabinet Grotesk',sans-serif;flex:2;font-size:13px;font-weight:600;background:#1C1B19;border:none;border-radius:100px;padding:11px;cursor:pointer;color:white;">Send my story</button>
+      </div>
+    </form>
+
+    <div id="form-success" style="display:none;text-align:center;padding:20px 0;">
+      <div style="font-size:32px;margin-bottom:12px;">🙏</div>
+      <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:16px;font-weight:600;color:#1C1B19;margin-bottom:8px;">Thank you for sharing.</div>
+      <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:13px;color:#9A9690;line-height:1.6;">We'll anonymise your story and add it to the feed. The feelings will stay intact.</div>
+      <button onclick="closeSubmitFormDirect()" style="font-family:'Cabinet Grotesk',sans-serif;margin-top:20px;font-size:13px;font-weight:500;background:#1C1B19;color:white;border:none;border-radius:100px;padding:10px 24px;cursor:pointer;">Close</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Share menu -->
+<div id="share-menu" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(28,27,25,0.5);align-items:flex-end;justify-content:center;" onclick="closeShareMenu(event)">
+  <div style="background:#FDFCFA;border-radius:20px 20px 0 0;padding:24px 20px 36px;width:100%;max-width:600px;">
+    <div style="width:36px;height:4px;background:#E8E6E2;border-radius:4px;margin:0 auto 20px;"></div>
+    <div style="font-size:13px;font-weight:500;color:#9A9690;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:16px;">Share this post</div>
+    <button onclick="chooseScreenshot()" style="font-family:inherit;display:flex;align-items:center;gap:14px;width:100%;background:none;border:1px solid #E8E6E2;border-radius:14px;padding:14px 18px;cursor:pointer;margin-bottom:10px;text-align:left;">
+      <span style="font-size:24px;">📸</span>
+      <div>
+        <div style="font-size:14px;font-weight:500;color:#1C1B19;">Save as screenshot</div>
+        <div style="font-size:12px;color:#9A9690;margin-top:2px;">Fullscreen view — screenshot and share anywhere</div>
+      </div>
+    </button>
+    <button id="share-copy-btn" onclick="copyFromMenu()" style="font-family:inherit;display:flex;align-items:center;gap:14px;width:100%;background:none;border:1px solid #E8E6E2;border-radius:14px;padding:14px 18px;cursor:pointer;text-align:left;">
+      <span style="font-size:24px;">📋</span>
+      <div>
+        <div style="font-size:14px;font-weight:500;color:#1C1B19;">Copy post text</div>
+        <div style="font-size:12px;color:#9A9690;margin-top:2px;">Paste directly into LinkedIn or anywhere</div>
+      </div>
+    </button>
+    <button onclick="closeShareMenuDirect()" style="font-family:inherit;width:100%;margin-top:14px;font-size:13px;color:#9A9690;background:none;border:none;cursor:pointer;padding:6px;">Cancel</button>
+  </div>
+</div>
+
+<!-- Screenshot mode -->
+<div id="screenshot-mode" style="display:none;position:fixed;inset:0;z-index:600;background:#F7F4EF;overflow-y:auto;">
+  <div style="max-width:600px;margin:0 auto;padding:20px 16px 110px;">
+    <div id="screenshot-card-wrap"></div>
+  </div>
+  <div style="position:fixed;bottom:0;left:0;right:0;background:rgba(28,27,25,0.97);padding:14px 20px 24px;">
+    <div style="max-width:600px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+      <div style="color:white;">
+        <div style="font-size:13px;font-weight:500;margin-bottom:2px;">📸 Screenshot this card</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.45);">Then share anywhere</div>
+      </div>
+      <button onclick="exitScreenshotMode()" style="font-family:inherit;font-size:13px;font-weight:500;background:white;color:#1C1B19;border:none;border-radius:100px;padding:9px 20px;cursor:pointer;flex-shrink:0;">Done</button>
+    </div>
+  </div>
+
+
+</div>
+
+<script>
+// ── SCROLL ANIMATION ──
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.transitionDelay = '0.05s';
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.card').forEach(card => observer.observe(card));
+
+// ── BASE LIKE COUNTS (from HTML) ──
+const baseLikes = {};
+document.querySelectorAll('[data-card]').forEach(card => {
+  const cid = card.dataset.card;
+  const el = document.getElementById('likes-' + cid);
+  if (el) baseLikes[cid] = parseInt(el.textContent.replace(/,/g,''));
+});
+
+// ── STORAGE HELPERS ──
+async function getStore(key) {
+  try { const r = await window.storage.get(key, true); return r ? JSON.parse(r.value) : null; } catch { return null; }
+}
+async function setStore(key, val) {
+  try { await window.storage.set(key, JSON.stringify(val), true); } catch {}
+}
+
+// ── INIT STATE FROM STORAGE ──
+async function initCounts() {
+  const cards = document.querySelectorAll('[data-card]');
+  for (const card of cards) {
+    const cid = card.dataset.card;
+    const liked = await getStore('liked-' + cid);
+    const comments = await getStore('comments-' + cid) || [];
+    const likeEl = document.getElementById('likes-' + cid);
+    if (likeEl) {
+      const base = baseLikes[cid] || 0;
+      likeEl.textContent = (base + (liked ? 1 : 0)).toLocaleString();
+    }
+    if (liked) {
+      const btn = card.querySelector('.act-like');
+      if (btn) btn.classList.add('liked');
+    }
+    const countEl = document.getElementById('comment-count-' + cid);
+    if (countEl) countEl.textContent = comments.length;
+    renderComments(cid, comments);
+  }
+}
+initCounts();
+
+// ── LIKE ──
+async function toggleLike(cid, btn) {
+  const liked = await getStore('liked-' + cid);
+  const likeEl = document.getElementById('likes-' + cid);
+  const base = baseLikes[cid] || 0;
+  if (liked) {
+    btn.classList.remove('liked');
+    await setStore('liked-' + cid, false);
+    likeEl.textContent = base.toLocaleString();
+  } else {
+    btn.classList.add('liked');
+    await setStore('liked-' + cid, true);
+    likeEl.textContent = (base + 1).toLocaleString();
+  }
+}
+
+// ── COMMENTS ──
+function toggleComments(cid) {
+  const section = document.getElementById('comments-' + cid);
+  section.classList.toggle('open');
+  if (section.classList.contains('open')) {
+    setTimeout(() => document.getElementById('comment-input-' + cid)?.focus(), 100);
+  }
+}
+
+async function submitComment(cid) {
+  const input = document.getElementById('comment-input-' + cid);
+  const text = input.value.trim();
+  if (!text) return;
+  const comments = await getStore('comments-' + cid) || [];
+  comments.push({ text, time: new Date().toISOString() });
+  await setStore('comments-' + cid, comments);
+  input.value = '';
+  renderComments(cid, comments);
+  document.getElementById('comment-count-' + cid).textContent = comments.length;
+}
+
+function renderComments(cid, comments) {
+  const list = document.getElementById('comment-list-' + cid);
+  if (!list) return;
+  list.innerHTML = comments.map(c => `
+    <div class="comment-item">
+      <div class="comment-av">ME</div>
+      <div class="comment-bubble">${c.text}</div>
+    </div>
+  `).join('');
+}
+
+// ── SHARE / SCREENSHOT MODE ──
+function getCardEl(cid) {
+  return document.querySelector('[data-card="' + cid + '"]')?.closest('.card');
+}
+
+let activeShareCid = null;
+
+function openShare(cid) {
+  activeShareCid = cid;
+  const menu = document.getElementById('share-menu');
+  menu.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  // reset copy button label
+  const copyBtn = document.getElementById('share-copy-btn');
+  if (copyBtn) copyBtn.querySelector('div > div').textContent = 'Copy post text';
+}
+
+function closeShareMenu(e) {
+  if (e.target === document.getElementById('share-menu')) closeShareMenuDirect();
+}
+function closeShareMenuDirect() {
+  document.getElementById('share-menu').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function chooseScreenshot() {
+  document.getElementById('share-menu').style.display = 'none';
+  const card = getCardEl(activeShareCid);
+  if (!card) return;
+  const wrap = document.getElementById('screenshot-card-wrap');
+  const clone = card.cloneNode(true);
+  clone.querySelector('.comment-section')?.remove();
+  clone.querySelector('.actions')?.remove();
+  clone.querySelector('.qrs')?.remove();
+  clone.style.cssText = 'opacity:1;translate:none;transform:none;transition:none;margin-bottom:0;';
+  wrap.innerHTML = '';
+  wrap.appendChild(clone);
+  document.getElementById('screenshot-mode').style.display = 'block';
+}
+
+function exitScreenshotMode() {
+  document.getElementById('screenshot-mode').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function copyFromMenu() {
+  const card = getCardEl(activeShareCid);
+  if (!card) return;
+  const name = card.querySelector('.meta-name')?.textContent || '';
+  const body = Array.from(card.querySelectorAll('.card-body p')).map(p => p.textContent).join('\n\n');
+  const msTitle = card.querySelector('.ms-title')?.textContent || '';
+  const text = name + ' on RealIn:\n\n' + body + '\n\n— ' + msTitle + '\n\nreali.in';
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('share-copy-btn');
+    if (btn) btn.querySelector('div > div').textContent = '✓ Copied!';
+    setTimeout(() => {
+      if (btn) btn.querySelector('div > div').textContent = 'Copy post text';
+      closeShareMenuDirect();
+    }, 1500);
+  }).catch(() => showToast('Could not copy'));
+}
+
+
+
+
+
+// ── COMPOSE INPUT ──
+document.getElementById('compose-input').addEventListener('click', openSubmitForm);
+
+// ── SUBMIT FORM ──
+function openSubmitForm() {
+  document.getElementById('submit-overlay').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+function closeSubmitForm(e) {
+  if (e.target === document.getElementById('submit-overlay')) closeSubmitFormDirect();
+}
+function closeSubmitFormDirect() {
+  document.getElementById('submit-overlay').style.display = 'none';
+  document.body.style.overflow = '';
+  document.getElementById('submit-form').style.display = 'block';
+  document.getElementById('form-success').style.display = 'none';
+  document.getElementById('submit-form').reset();
+}
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('submit-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const form = e.target;
+    const data = new FormData(form);
+    try {
+      const res = await fetch('https://formspree.io/f/xlgaokaz', {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        form.style.display = 'none';
+        document.getElementById('form-success').style.display = 'block';
+      }
+    } catch(err) {}
+  });
+});
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+</script>
+</body>
+</html>
