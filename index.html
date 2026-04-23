@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RealIn — The Honest Feed</title>
+<link rel="icon" type="image/png" href="https://raw.githubusercontent.com/uxcircles/realin/bd1ff56dd0fcfaf706f3fe378748c520fd50dc0c/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;800&display=swap" rel="stylesheet">
-<link rel="icon" type="image/png" href="https://raw.githubusercontent.com/uxcircles/realin/bd1ff56dd0fcfaf706f3fe378748c520fd50dc0c/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Merriweather:wght@700;900&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -48,8 +48,7 @@ body {
 }
 .logo {
   font-size: 20px;
-  font-weight: 800;
-  letter-spacing: -0.3px;
+  letter-spacing: -0.5px;
   color: var(--ink);
   flex-shrink: 0;
 }
@@ -62,7 +61,7 @@ body {
   .topbar { padding: 0 14px; }
 }
 .btn {
-  font-family: 'Cabinet Grotesk', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 13px;
   padding: 7px 16px;
   border-radius: 100px;
@@ -144,7 +143,7 @@ body {
 .comp-av { width: 36px; height: 36px; border-radius: 50%; background: var(--cream-dark); flex-shrink: 0; }
 .comp-input {
   flex: 1;
-  font-family: 'Cabinet Grotesk', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 13px;
   color: var(--ink-faint);
   border: 1px solid var(--border);
@@ -235,7 +234,7 @@ body {
 
 .qrs { display: flex; flex-wrap: wrap; gap: 5px; padding: 0 20px 14px; }
 .qr {
-  font-family: 'Cabinet Grotesk', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 12px; font-weight: 300;
   border: 1px solid var(--border-strong);
   border-radius: 100px;
@@ -254,7 +253,7 @@ body {
 .reactions { font-size: 12px; color: var(--ink-faint); font-weight: 300; }
 .actions { display: flex; gap: 2px; }
 .act {
-  font-family: 'Cabinet Grotesk', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 12px; color: var(--ink-faint);
   background: none; border: none;
   padding: 5px 10px; border-radius: 8px; cursor: pointer;
@@ -291,7 +290,7 @@ body {
   display: flex; gap: 8px; padding: 10px 20px 14px; align-items: center;
 }
 .comment-input {
-  flex: 1; font-family: 'Cabinet Grotesk', sans-serif;
+  flex: 1; font-family: 'Inter', sans-serif;
   font-size: 13px; font-weight: 300;
   border: 1px solid var(--border); border-radius: 100px;
   padding: 8px 16px; background: var(--white); outline: none;
@@ -299,7 +298,7 @@ body {
 }
 .comment-input:focus { border-color: var(--border-strong); }
 .comment-submit {
-  font-family: 'Cabinet Grotesk', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 12px; font-weight: 500;
   background: var(--ink); color: var(--white);
   border: none; border-radius: 100px;
@@ -327,8 +326,10 @@ body {
 <body>
 
 <div class="topbar">
-  <div class="logo">Real<span style="color:var(--red)">In</span></div>
-  <div class="tagline">The honest professional network</div>
+  <div style="display:flex;align-items:baseline;gap:10px;min-width:0;">
+    <div class="logo"><span style="font-family:'Merriweather',Georgia,serif;font-weight:900;">Real</span><span style="font-family:'Inter',sans-serif;font-weight:800;color:white;background:var(--red);padding:0px 6px;border-radius:6px;margin-left:4px;">In</span></div>
+    <div class="tagline">The honest professional network</div>
+  </div>
   <div class="nav-right">
     <a href="https://buy.stripe.com/aFa14n6pMguDft44RP9bO0f" target="_blank" class="btn" style="text-decoration:none;">☕ Buy me a coffee</a>
     <button class="btn primary" onclick="openSubmitForm()">Share your truth</button>
@@ -1366,15 +1367,15 @@ body {
 </div>
 
 <div style="text-align:center;padding:40px 20px 60px;border-top:1px solid rgba(28,27,25,0.08);background:rgba(247,244,239,0.6);">
-  <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:15px;font-weight:800;color:#1C1B19;margin-bottom:10px;letter-spacing:-0.3px;">Real<span style="color:#B83232;">In</span></div>
-  <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:12px;color:#9A9690;line-height:1.8;margin-bottom:20px;max-width:340px;margin-left:auto;margin-right:auto;">
+  <div style="font-family:'Inter',sans-serif;font-size:15px;font-weight:800;color:#1C1B19;margin-bottom:10px;letter-spacing:-0.3px;">Real<span style="color:#B83232;">In</span></div>
+  <div style="font-family:'Inter',sans-serif;font-size:12px;color:#9A9690;line-height:1.8;margin-bottom:20px;max-width:340px;margin-left:auto;margin-right:auto;">
     All characters, companies, and situations depicted are entirely fictional. Any resemblance to real persons or workplaces is purely coincidental — and deeply unsurprising.
   </div>
   <div style="display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;">
-    <a href="https://ux-circles.com" target="_blank" style="font-family:'Cabinet Grotesk',sans-serif;display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#9A9690;text-decoration:none;border:1px solid rgba(28,27,25,0.15);border-radius:100px;padding:8px 16px;">
+    <a href="https://ux-circles.com" target="_blank" style="font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#9A9690;text-decoration:none;border:1px solid rgba(28,27,25,0.15);border-radius:100px;padding:8px 16px;">
       Made by UX CIRCLES
     </a>
-    <a href="https://buy.stripe.com/aFa14n6pMguDft44RP9bO0f" target="_blank" style="font-family:'Cabinet Grotesk',sans-serif;display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#7a4410;text-decoration:none;background:#fef0d9;border:1px solid #e8d0b0;border-radius:100px;padding:8px 16px;">
+    <a href="https://buy.stripe.com/aFa14n6pMguDft44RP9bO0f" target="_blank" style="font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#7a4410;text-decoration:none;background:#fef0d9;border:1px solid #e8d0b0;border-radius:100px;padding:8px 16px;">
       ☕ Buy me a coffee
     </a>
   </div>
@@ -1385,42 +1386,42 @@ body {
 <div id="submit-overlay" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(28,27,25,0.5);align-items:center;justify-content:center;padding:20px;" onclick="closeSubmitForm(event)">
   <div style="background:#FDFCFA;border-radius:20px;padding:28px 24px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;">
     <div style="margin-bottom:20px;">
-      <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:18px;font-weight:700;color:#1C1B19;margin-bottom:6px;">Share your truth</div>
-      <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:13px;color:#9A9690;line-height:1.6;">Your story will be anonymised before publishing. We'll rewrite it to protect your identity — but keep the truth intact.</div>
+      <div style="font-family:'Inter',sans-serif;font-size:18px;font-weight:700;color:#1C1B19;margin-bottom:6px;">Share your truth</div>
+      <div style="font-family:'Inter',sans-serif;font-size:13px;color:#9A9690;line-height:1.6;">Your story will be anonymised before publishing. We'll rewrite it to protect your identity — but keep the truth intact.</div>
     </div>
 
     <form id="submit-form" action="https://formspree.io/f/xlgaokaz" method="POST">
       <div style="margin-bottom:16px;">
-        <label style="font-family:'Cabinet Grotesk',sans-serif;font-size:12px;font-weight:500;color:#4A4843;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:6px;">Your story *</label>
-        <textarea name="story" required placeholder="What's the real story behind your milestone? The promotion with no raise. The 18 months nobody knows about. The thing you'd never post on LinkedIn." style="font-family:'Cabinet Grotesk',sans-serif;width:100%;min-height:140px;border:1px solid #E8E6E2;border-radius:12px;padding:12px 14px;font-size:14px;color:#1C1B19;background:#F7F4EF;outline:none;resize:vertical;line-height:1.6;"></textarea>
+        <label style="font-family:'Inter',sans-serif;font-size:12px;font-weight:500;color:#4A4843;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:6px;">Your story *</label>
+        <textarea name="story" required placeholder="What's the real story behind your milestone? The promotion with no raise. The 18 months nobody knows about. The thing you'd never post on LinkedIn." style="font-family:'Inter',sans-serif;width:100%;min-height:140px;border:1px solid #E8E6E2;border-radius:12px;padding:12px 14px;font-size:14px;color:#1C1B19;background:#F7F4EF;outline:none;resize:vertical;line-height:1.6;"></textarea>
       </div>
 
       <div style="margin-bottom:16px;">
-        <label style="font-family:'Cabinet Grotesk',sans-serif;font-size:12px;font-weight:500;color:#4A4843;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:6px;">Context <span style="color:#9A9690;font-weight:400;text-transform:none;letter-spacing:0;">(optional)</span></label>
-        <input name="context" type="text" placeholder="e.g. 6 years in tech, mid-level manager, London" style="font-family:'Cabinet Grotesk',sans-serif;width:100%;border:1px solid #E8E6E2;border-radius:12px;padding:10px 14px;font-size:14px;color:#1C1B19;background:#F7F4EF;outline:none;" />
+        <label style="font-family:'Inter',sans-serif;font-size:12px;font-weight:500;color:#4A4843;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:6px;">Context <span style="color:#9A9690;font-weight:400;text-transform:none;letter-spacing:0;">(optional)</span></label>
+        <input name="context" type="text" placeholder="e.g. 6 years in tech, mid-level manager, London" style="font-family:'Inter',sans-serif;width:100%;border:1px solid #E8E6E2;border-radius:12px;padding:10px 14px;font-size:14px;color:#1C1B19;background:#F7F4EF;outline:none;" />
       </div>
 
       <div style="margin-bottom:24px;">
-        <label style="font-family:'Cabinet Grotesk',sans-serif;font-size:12px;font-weight:500;color:#4A4843;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:6px;">Your name <span style="color:#9A9690;font-weight:400;text-transform:none;letter-spacing:0;">(optional — won't be published)</span></label>
-        <input name="name" type="text" placeholder="Only used to reply to you if needed" style="font-family:'Cabinet Grotesk',sans-serif;width:100%;border:1px solid #E8E6E2;border-radius:12px;padding:10px 14px;font-size:14px;color:#1C1B19;background:#F7F4EF;outline:none;" />
+        <label style="font-family:'Inter',sans-serif;font-size:12px;font-weight:500;color:#4A4843;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:6px;">Your name <span style="color:#9A9690;font-weight:400;text-transform:none;letter-spacing:0;">(optional — won't be published)</span></label>
+        <input name="name" type="text" placeholder="Only used to reply to you if needed" style="font-family:'Inter',sans-serif;width:100%;border:1px solid #E8E6E2;border-radius:12px;padding:10px 14px;font-size:14px;color:#1C1B19;background:#F7F4EF;outline:none;" />
       </div>
 
       <div style="background:#F7F4EF;border-radius:10px;padding:12px 14px;margin-bottom:20px;display:flex;gap:10px;align-items:flex-start;">
         <span style="font-size:16px;flex-shrink:0;">🔒</span>
-        <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:12px;color:#9A9690;line-height:1.6;">Your submission is anonymous. We'll rewrite names, companies, and identifying details before publishing. You'll be in good company.</div>
+        <div style="font-family:'Inter',sans-serif;font-size:12px;color:#9A9690;line-height:1.6;">Your submission is anonymous. We'll rewrite names, companies, and identifying details before publishing. You'll be in good company.</div>
       </div>
 
       <div style="display:flex;gap:10px;">
-        <button type="button" onclick="closeSubmitFormDirect()" style="font-family:'Cabinet Grotesk',sans-serif;flex:1;font-size:13px;font-weight:500;background:none;border:1px solid #E8E6E2;border-radius:100px;padding:11px;cursor:pointer;color:#4A4843;">Cancel</button>
-        <button type="submit" style="font-family:'Cabinet Grotesk',sans-serif;flex:2;font-size:13px;font-weight:600;background:#1C1B19;border:none;border-radius:100px;padding:11px;cursor:pointer;color:white;">Send my story</button>
+        <button type="button" onclick="closeSubmitFormDirect()" style="font-family:'Inter',sans-serif;flex:1;font-size:13px;font-weight:500;background:none;border:1px solid #E8E6E2;border-radius:100px;padding:11px;cursor:pointer;color:#4A4843;">Cancel</button>
+        <button type="submit" style="font-family:'Inter',sans-serif;flex:2;font-size:13px;font-weight:600;background:#1C1B19;border:none;border-radius:100px;padding:11px;cursor:pointer;color:white;">Send my story</button>
       </div>
     </form>
 
     <div id="form-success" style="display:none;text-align:center;padding:20px 0;">
       <div style="font-size:32px;margin-bottom:12px;">🙏</div>
-      <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:16px;font-weight:600;color:#1C1B19;margin-bottom:8px;">Thank you for sharing.</div>
-      <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:13px;color:#9A9690;line-height:1.6;">We'll anonymise your story and add it to the feed. The feelings will stay intact.</div>
-      <button onclick="closeSubmitFormDirect()" style="font-family:'Cabinet Grotesk',sans-serif;margin-top:20px;font-size:13px;font-weight:500;background:#1C1B19;color:white;border:none;border-radius:100px;padding:10px 24px;cursor:pointer;">Close</button>
+      <div style="font-family:'Inter',sans-serif;font-size:16px;font-weight:600;color:#1C1B19;margin-bottom:8px;">Thank you for sharing.</div>
+      <div style="font-family:'Inter',sans-serif;font-size:13px;color:#9A9690;line-height:1.6;">We'll anonymise your story and add it to the feed. The feelings will stay intact.</div>
+      <button onclick="closeSubmitFormDirect()" style="font-family:'Inter',sans-serif;margin-top:20px;font-size:13px;font-weight:500;background:#1C1B19;color:white;border:none;border-radius:100px;padding:10px 24px;cursor:pointer;">Close</button>
     </div>
   </div>
 </div>
