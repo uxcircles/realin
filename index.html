@@ -102,6 +102,11 @@ body {
   #share-menu { align-items: flex-end !important; }
   #share-sheet { border-radius: 20px 20px 0 0 !important; max-width: 100% !important; margin: 0 !important; padding-bottom: 36px !important; }
   #share-sheet .drag-handle { display: block !important; width: 36px; height: 4px; background: #E8E6E2; border-radius: 4px; margin: 0 auto 20px; }
+  .banner-br { display: block; }
+  .banner-inline { display: inline; }
+}
+@media (min-width: 481px) {
+  .banner-br { display: none; }
 }
 @media (min-width: 481px) {
   .coffee-short { display: none; }
@@ -285,10 +290,13 @@ body {
   font-size: 12px; font-weight: 300;
   border: 1px solid var(--border-strong);
   border-radius: 100px;
-  padding: 5px 13px;
-  min-height: 30px;
+  padding: 0 13px;
+  height: 32px;
+  min-height: 32px;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  line-height: 1;
   color: var(--ink-mid);
   background: none; cursor: pointer;
   transition: background 0.12s;
@@ -310,6 +318,55 @@ body {
   transition: background 0.12s, color 0.12s;
 }
 .act:hover { background: var(--cream-dark); color: var(--ink-mid); }
+/* ── BACK TO TOP ── */
+.back-to-top {
+  position: fixed;
+  bottom: 24px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+  z-index: 99;
+  box-shadow: 0 2px 12px rgba(28,27,25,0.2);
+}
+.back-to-top.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.back-to-top:hover { transform: translateY(-2px); }
+
+/* ── LIKE ANIMATION ── */
+@keyframes likePopIn {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.4); }
+  70%  { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+@keyframes heartFloat {
+  0%   { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-40px) scale(0.6); }
+}
+.act-like.liked { color: var(--red); }
+.act-like.pop { animation: likePopIn 0.35s ease forwards; }
+.heart-float {
+  position: absolute;
+  font-size: 16px;
+  pointer-events: none;
+  animation: heartFloat 0.8s ease forwards;
+  z-index: 999;
+}
+
 .divider { display: flex; align-items: center; gap: 12px; margin: 6px 0 18px; }
 .divider-line { flex: 1; height: 1px; background: var(--border); }
 .divider-text { font-size: 11px; color: var(--ink-faint); white-space: nowrap; font-size: 12px; font-weight: 400; letter-spacing: 0.02em; }
@@ -391,13 +448,13 @@ body {
 
   <div class="banner">
     <div class="banner-text">
-      <strong>Welcome to RealIn.</strong> LinkedIn shows the highlight reel.<br>We show the cost of getting there.
+      <strong>Welcome to RealIn.</strong><br class="banner-br"> <span class="banner-inline">LinkedIn shows the highlight reel. We show the cost of getting there.</span>
     </div>
     <div class="badge">No humblebrag zone</div>
   </div>
 
   <div class="composer">
-    <div class="comp-av"></div>
+    <div class="comp-av" style="display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;color:#9A9690;">ME</div>
     <input class="comp-input" id="compose-input" placeholder="What's the real story behind your milestone?" readonly style="cursor:pointer;" />
   </div>
 
@@ -2184,7 +2241,7 @@ body {
       ☕ Buy me a coffee
     </a>
   </div>
-  <a href="https://ux-circles.com" target="_blank" style="font-family:'Inter',sans-serif;font-size:11px;color:#9A9690;text-decoration:none;letter-spacing:0.06em;text-transform:uppercase;transition:color 0.15s;" onmouseover="this.style.color='#4A4843'" onmouseout="this.style.color='#9A9690'">Made by <span style="text-decoration:underline;text-underline-offset:2px;">UX CIRCLES</span></a>
+  <a href="https://ux-circles.com" target="_blank" style="font-family:'Inter',sans-serif;font-size:11px;color:#9A9690;text-decoration:none;letter-spacing:0.06em;text-transform:uppercase;transition:color 0.15s;" onmouseover="this.style.color='#4A4843'" onmouseout="this.style.color='#9A9690'">Made by UX CIRCLES</a>
 </div>
 
 
@@ -2232,6 +2289,8 @@ body {
   </div>
 </div>
 
+
+<button class="back-to-top" id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 <!-- Share menu -->
 <div id="share-menu" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(28,27,25,0.5);align-items:center;justify-content:center;" onclick="closeShareMenu(event)">
@@ -2327,8 +2386,8 @@ async function initCounts() {
     });
   }
 
-  // Fetch all comments count
-  const { data: commentsData } = await sb.from('comments').select('card_id');
+  // Fetch all approved comments count
+  const { data: commentsData } = await sb.from('comments').select('card_id').eq('approved', true);
   const commentsByCard = {};
   if (commentsData) {
     commentsData.forEach(c => {
@@ -2367,6 +2426,18 @@ async function toggleLike(cid, btn) {
     btn.classList.add('liked');
     likeEl.textContent = formatCount(cur + 1);
     await sb.from('likes').insert({ card_id: cid, session_id: SESSION_ID });
+
+    // Heart float animation
+    btn.classList.remove('pop');
+    void btn.offsetWidth;
+    btn.classList.add('pop');
+    const heart = document.createElement('div');
+    heart.className = 'heart-float';
+    heart.textContent = '❤️';
+    const rect = btn.getBoundingClientRect();
+    heart.style.cssText = 'position:fixed;left:' + (rect.left + rect.width/2 - 10) + 'px;top:' + (rect.top - 10) + 'px;';
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 800);
   }
 }
 
@@ -2385,20 +2456,47 @@ function toggleComments(cid) {
 }
 
 async function loadComments(cid) {
-  const { data } = await sb.from('comments').select('content, created_at').eq('card_id', cid).order('created_at');
+  const { data } = await sb.from('comments').select('content, created_at').eq('card_id', cid).eq('approved', true).order('created_at');
   renderComments(cid, data || []);
+}
+
+// ── PROFANITY FILTER ──
+const blockedWords = [
+  'fuck', 'shit', 'bitch', 'asshole', 'cunt', 'dick', 'pussy', 'bastard',
+  'nigger', 'faggot', 'retard', 'whore', 'slut', 'twat', 'wanker', 'bollocks'
+];
+function containsProfanity(text) {
+  const lower = text.toLowerCase();
+  return blockedWords.some(word => {
+    const regex = new RegExp('\\b' + word + '\\b', 'i');
+    return regex.test(lower);
+  });
 }
 
 async function submitComment(cid) {
   const input = document.getElementById('comment-input-' + cid);
   const text = input.value.trim();
   if (!text) return;
+  if (containsProfanity(text)) {
+    input.style.borderColor = '#B83232';
+    input.placeholder = 'Please keep it respectful 🙏';
+    input.value = '';
+    setTimeout(() => {
+      input.style.borderColor = '';
+      input.placeholder = 'Add a comment...';
+    }, 2500);
+    return;
+  }
   input.value = '';
   const { error } = await sb.from('comments').insert({ card_id: cid, content: text });
   if (!error) {
-    await loadComments(cid);
-    const countEl = document.getElementById('comment-count-' + cid);
-    if (countEl) countEl.textContent = parseInt(countEl.textContent || 0) + 1;
+    // Show pending message
+    const list = document.getElementById('comment-list-' + cid);
+    const pending = document.createElement('div');
+    pending.className = 'comment-item';
+    pending.innerHTML = '<div class="comment-av">ME</div><div class="comment-bubble" style="color:#9A9690;font-style:italic;">Your comment is pending review 🙏</div>';
+    if (list) list.appendChild(pending);
+    setTimeout(() => pending.remove(), 4000);
   }
 }
 
@@ -2563,6 +2661,15 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     } catch(err) {}
   });
+});
+
+// ── BACK TO TOP ──
+window.addEventListener('scroll', () => {
+  const btn = document.getElementById('back-to-top');
+  if (btn) {
+    if (window.scrollY > 400) btn.classList.add('visible');
+    else btn.classList.remove('visible');
+  }
 });
 
 function showToast(msg) {
