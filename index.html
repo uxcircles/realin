@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RealIn — The honest professional network</title>
+<title>RealIn — The Honest Feed</title>
 <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/uxcircles/realin/1b56da720287c52d8cae52dc5eaf3fc5835fb4b8/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -57,8 +57,14 @@ body {
 .nav-right { display: flex; gap: 6px; flex-shrink: 0; }
 @media (max-width: 480px) {
   .tagline { display: none; }
-  .btn:not(.primary) { display: none; }
+  .btn:not(.primary):not(.btn-coffee) { display: none; }
   .topbar { padding: 0 14px; }
+  .coffee-full { display: none; }
+  .coffee-short { display: inline; }
+}
+@media (min-width: 481px) {
+  .coffee-short { display: none; }
+  .coffee-full { display: inline; }
 }
 .btn {
   font-family: 'Inter', sans-serif;
@@ -322,6 +328,7 @@ body {
 /* screenshot mode handled inline */
 
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -331,7 +338,7 @@ body {
     <div class="tagline">The honest professional network</div>
   </div>
   <div class="nav-right">
-    <a href="https://buy.stripe.com/aFa14n6pMguDft44RP9bO0f" target="_blank" class="btn" style="text-decoration:none;">☕ Buy me a coffee</a>
+    <a href="https://buy.stripe.com/aFa14n6pMguDft44RP9bO0f" target="_blank" class="btn btn-coffee" style="text-decoration:none;"><span class="coffee-full">☕ Buy me a coffee</span><span class="coffee-short">☕</span></a>
     <button class="btn primary" onclick="openSubmitForm()">Share your truth</button>
   </div>
 </div>
@@ -391,7 +398,7 @@ body {
       <button class="qr">Meets expectations for 5 years here</button>
       <button class="qr">The performance IS exhausting</button>
     </div>
-    <div class="card-footer" data-card="1">
+    <div class="card-footer card-employee-footer" data-card="1">
       <div class="reactions">
         <span class="reaction-emojis">💀❤️😮</span>
         <span class="like-count" id="likes-1">193</span>
@@ -451,7 +458,7 @@ body {
       <button class="qr">Well endured, Marcus 🫂</button>
       <button class="qr">Counter-offer time</button>
     </div>
-    <div class="card-footer" data-card="2">
+    <div class="card-footer card-employee-footer" data-card="2">
       <div class="reactions">
         <span class="reaction-emojis">💀🫂❤️</span>
         <span class="like-count" id="likes-2">84</span>
@@ -509,7 +516,7 @@ body {
       <button class="qr">Classic quiet promotion</button>
       <button class="qr">I did this, then quit</button>
     </div>
-    <div class="card-footer" data-card="3">
+    <div class="card-footer card-employee-footer" data-card="3">
       <div class="reactions">
         <span class="reaction-emojis">😤💀❤️</span>
         <span class="like-count" id="likes-3">23</span>
@@ -567,7 +574,7 @@ body {
       <button class="qr">We see you 🫂</button>
       <button class="qr">Document everything</button>
     </div>
-    <div class="card-footer" data-card="4">
+    <div class="card-footer card-employee-footer" data-card="4">
       <div class="reactions">
         <span class="reaction-emojis">🫂❤️💀</span>
         <span class="like-count" id="likes-4">57</span>
@@ -626,7 +633,7 @@ body {
       <button class="qr">The system is broken</button>
       <button class="qr">Still in round 4 myself 😭</button>
     </div>
-    <div class="card-footer" data-card="5">
+    <div class="card-footer card-employee-footer" data-card="5">
       <div class="reactions">
         <span class="reaction-emojis">❤️💀🫂</span>
         <span class="like-count" id="likes-5">412</span>
@@ -686,7 +693,7 @@ body {
       <button class="qr">847??? I'm so sorry</button>
       <button class="qr">Culture fit = we want someone younger</button>
     </div>
-    <div class="card-footer" data-card="6">
+    <div class="card-footer card-employee-footer" data-card="6">
       <div class="reactions">
         <span class="reaction-emojis">🫂💀❤️</span>
         <span class="like-count" id="likes-6">1200</span>
@@ -748,7 +755,7 @@ body {
       <button class="qr">"Nothing personal" 🙃</button>
       <button class="qr">DM me, I have a lead</button>
     </div>
-    <div class="card-footer" data-card="7">
+    <div class="card-footer card-employee-footer" data-card="7">
       <div class="reactions">
         <span class="reaction-emojis">💀😤🫂</span>
         <span class="like-count" id="likes-7">1800</span>
@@ -806,7 +813,7 @@ body {
       <button class="qr">I did this last Friday</button>
       <button class="qr">Mark the email low priority back</button>
     </div>
-    <div class="card-footer" data-card="8">
+    <div class="card-footer card-employee-footer" data-card="8">
       <div class="reactions">
         <span class="reaction-emojis">💀😤❤️</span>
         <span class="like-count" id="likes-8">2100</span>
@@ -863,7 +870,7 @@ body {
       <button class="qr">Year 4 here, solidarity</button>
       <button class="qr">What's in slide 7?</button>
     </div>
-    <div class="card-footer" data-card="9">
+    <div class="card-footer card-employee-footer" data-card="9">
       <div class="reactions">
         <span class="reaction-emojis">💀😭❤️</span>
         <span class="like-count" id="likes-9">4400</span>
@@ -921,7 +928,7 @@ body {
       <button class="qr">Never again</button>
       <button class="qr">What did you say???</button>
     </div>
-    <div class="card-footer" data-card="10">
+    <div class="card-footer card-employee-footer" data-card="10">
       <div class="reactions">
         <span class="reaction-emojis">💀😤🫂</span>
         <span class="like-count" id="likes-10">5200</span>
@@ -980,7 +987,7 @@ body {
       <button class="qr">The #wins channel is sending me</button>
       <button class="qr">Negotiate before you go in</button>
     </div>
-    <div class="card-footer" data-card="11">
+    <div class="card-footer card-employee-footer" data-card="11">
       <div class="reactions">
         <span class="reaction-emojis">💀😂🫂</span>
         <span class="like-count" id="likes-11">1600</span>
@@ -1037,7 +1044,7 @@ body {
       <button class="qr">File means no</button>
       <button class="qr">DM me, I have a real lead</button>
     </div>
-    <div class="card-footer" data-card="12">
+    <div class="card-footer card-employee-footer" data-card="12">
       <div class="reactions">
         <span class="reaction-emojis">💀😭❤️</span>
         <span class="like-count" id="likes-12">3300</span>
@@ -1097,7 +1104,7 @@ body {
       <button class="qr">This is why you job hop</button>
       <button class="qr">I hope the CV update went well</button>
     </div>
-    <div class="card-footer" data-card="13">
+    <div class="card-footer card-employee-footer" data-card="13">
       <div class="reactions">
         <span class="reaction-emojis">😤💀❤️</span>
         <span class="like-count" id="likes-13">7800</span>
@@ -1154,7 +1161,7 @@ body {
       <button class="qr">I also have a decoy sentence</button>
       <button class="qr">This call could have been an email</button>
     </div>
-    <div class="card-footer" data-card="14">
+    <div class="card-footer card-employee-footer" data-card="14">
       <div class="reactions">
         <span class="reaction-emojis">😂💀❤️</span>
         <span class="like-count" id="likes-14">9100</span>
@@ -1212,7 +1219,7 @@ body {
       <button class="qr">The sunrise slide 💀</button>
       <button class="qr">Greatest assets deserve severance</button>
     </div>
-    <div class="card-footer" data-card="15">
+    <div class="card-footer card-employee-footer" data-card="15">
       <div class="reactions">
         <span class="reaction-emojis">😤💀😮</span>
         <span class="like-count" id="likes-15">6600</span>
@@ -1271,7 +1278,7 @@ body {
       <button class="qr">You are not a legacy integration</button>
       <button class="qr">Enjoy the walk. Then lawyer up.</button>
     </div>
-    <div class="card-footer" data-card="16">
+    <div class="card-footer card-employee-footer" data-card="16">
       <div class="reactions">
         <span class="reaction-emojis">💀😤🫂</span>
         <span class="like-count" id="likes-16">8300</span>
@@ -1694,7 +1701,7 @@ body {
       <button class="qr">I needed this today</button>
       <button class="qr">Saving this post forever</button>
     </div>
-    <div class="card-footer" data-card="17">
+    <div class="card-footer card-nina-footer" data-card="17">
       <div class="reactions">
         <span class="reaction-emojis">❤️🌱🫂</span>
         <span class="like-count" id="likes-17">2400</span>
@@ -1838,59 +1845,91 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.08 });
 document.querySelectorAll('.card').forEach(card => observer.observe(card));
 
+// ── SUPABASE SETUP ──
+const SUPABASE_URL = 'https://bckswxqsfciuaqibvlno.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_vdcRoKkpEw_lI7Zg6BWV5w_oUNEzeUD';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ── SESSION ID (anonymous user identifier) ──
+function getSessionId() {
+  let sid = localStorage.getItem('reatin_session');
+  if (!sid) {
+    sid = crypto.randomUUID();
+    localStorage.setItem('reatin_session', sid);
+  }
+  return sid;
+}
+const SESSION_ID = getSessionId();
+
 // ── BASE LIKE COUNTS (from HTML) ──
 const baseLikes = {};
 document.querySelectorAll('[data-card]').forEach(card => {
   const cid = card.dataset.card;
   const el = document.getElementById('likes-' + cid);
-  if (el) baseLikes[cid] = parseInt(el.textContent.replace(/,/g,''));
+  if (el) baseLikes[cid] = parseInt(el.textContent.replace(/,/g,'').replace(/k/,'000')) || 0;
 });
 
-// ── STORAGE HELPERS ──
-async function getStore(key) {
-  try { const r = await window.storage.get(key, true); return r ? JSON.parse(r.value) : null; } catch { return null; }
-}
-async function setStore(key, val) {
-  try { await window.storage.set(key, JSON.stringify(val), true); } catch {}
-}
-
-// ── INIT STATE FROM STORAGE ──
+// ── INIT: load likes and comments from Supabase ──
 async function initCounts() {
   const cards = document.querySelectorAll('[data-card]');
-  for (const card of cards) {
-    const cid = card.dataset.card;
-    const liked = await getStore('liked-' + cid);
-    const comments = await getStore('comments-' + cid) || [];
-    const likeEl = document.getElementById('likes-' + cid);
-    if (likeEl) {
-      const base = baseLikes[cid] || 0;
-      likeEl.textContent = (base + (liked ? 1 : 0)).toLocaleString();
-    }
-    if (liked) {
-      const btn = card.querySelector('.act-like');
-      if (btn) btn.classList.add('liked');
-    }
-    const countEl = document.getElementById('comment-count-' + cid);
-    if (countEl) countEl.textContent = comments.length;
-    renderComments(cid, comments);
+  const cardIds = Array.from(cards).map(c => parseInt(c.dataset.card));
+
+  // Fetch all likes
+  const { data: likesData } = await sb.from('likes').select('card_id, session_id');
+  const likesByCard = {};
+  const myLikes = new Set();
+  if (likesData) {
+    likesData.forEach(l => {
+      likesByCard[l.card_id] = (likesByCard[l.card_id] || 0) + 1;
+      if (l.session_id === SESSION_ID) myLikes.add(l.card_id);
+    });
   }
+
+  // Fetch all comments count
+  const { data: commentsData } = await sb.from('comments').select('card_id');
+  const commentsByCard = {};
+  if (commentsData) {
+    commentsData.forEach(c => {
+      commentsByCard[c.card_id] = (commentsByCard[c.card_id] || 0) + 1;
+    });
+  }
+
+  // Update UI
+  cards.forEach(card => {
+    const cid = parseInt(card.dataset.card);
+    const likeEl = document.getElementById('likes-' + cid);
+    const countEl = document.getElementById('comment-count-' + cid);
+    const btn = card.querySelector('.act-like');
+
+    if (likeEl) {
+      const total = (baseLikes[cid] || 0) + (likesByCard[cid] || 0);
+      likeEl.textContent = total >= 1000 ? (total/1000).toFixed(1) + 'k' : total.toString();
+    }
+    if (countEl) countEl.textContent = commentsByCard[cid] || 0;
+    if (btn && myLikes.has(cid)) btn.classList.add('liked');
+  });
 }
 initCounts();
 
 // ── LIKE ──
 async function toggleLike(cid, btn) {
-  const liked = await getStore('liked-' + cid);
+  const isLiked = btn.classList.contains('liked');
   const likeEl = document.getElementById('likes-' + cid);
-  const base = baseLikes[cid] || 0;
-  if (liked) {
+  const cur = parseFloat(likeEl.textContent) * (likeEl.textContent.includes('k') ? 1000 : 1);
+
+  if (isLiked) {
     btn.classList.remove('liked');
-    await setStore('liked-' + cid, false);
-    likeEl.textContent = base.toLocaleString();
+    likeEl.textContent = formatCount(Math.max(0, cur - 1));
+    await sb.from('likes').delete().eq('card_id', cid).eq('session_id', SESSION_ID);
   } else {
     btn.classList.add('liked');
-    await setStore('liked-' + cid, true);
-    likeEl.textContent = (base + 1).toLocaleString();
+    likeEl.textContent = formatCount(cur + 1);
+    await sb.from('likes').insert({ card_id: cid, session_id: SESSION_ID });
   }
+}
+
+function formatCount(n) {
+  return n >= 1000 ? (n/1000).toFixed(1) + 'k' : Math.round(n).toString();
 }
 
 // ── COMMENTS ──
@@ -1898,20 +1937,27 @@ function toggleComments(cid) {
   const section = document.getElementById('comments-' + cid);
   section.classList.toggle('open');
   if (section.classList.contains('open')) {
+    loadComments(cid);
     setTimeout(() => document.getElementById('comment-input-' + cid)?.focus(), 100);
   }
+}
+
+async function loadComments(cid) {
+  const { data } = await sb.from('comments').select('content, created_at').eq('card_id', cid).order('created_at');
+  renderComments(cid, data || []);
 }
 
 async function submitComment(cid) {
   const input = document.getElementById('comment-input-' + cid);
   const text = input.value.trim();
   if (!text) return;
-  const comments = await getStore('comments-' + cid) || [];
-  comments.push({ text, time: new Date().toISOString() });
-  await setStore('comments-' + cid, comments);
   input.value = '';
-  renderComments(cid, comments);
-  document.getElementById('comment-count-' + cid).textContent = comments.length;
+  const { error } = await sb.from('comments').insert({ card_id: cid, content: text });
+  if (!error) {
+    await loadComments(cid);
+    const countEl = document.getElementById('comment-count-' + cid);
+    if (countEl) countEl.textContent = parseInt(countEl.textContent || 0) + 1;
+  }
 }
 
 function renderComments(cid, comments) {
@@ -1920,7 +1966,7 @@ function renderComments(cid, comments) {
   list.innerHTML = comments.map(c => `
     <div class="comment-item">
       <div class="comment-av">ME</div>
-      <div class="comment-bubble">${c.text}</div>
+      <div class="comment-bubble">${c.content}</div>
     </div>
   `).join('');
 }
@@ -1990,6 +2036,43 @@ function copyFromMenu() {
 
 
 
+
+// ── SHUFFLE CARDS ──
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function shuffleCards() {
+  const layout = document.querySelector('.layout');
+  const dividers = Array.from(layout.querySelectorAll('.divider'));
+  const firstDivider = dividers[0]; // before management section
+  const ninaDivider = dividers[1];  // "and one that ended differently"
+
+  // Employee cards
+  const employeeCards = Array.from(layout.querySelectorAll('.card')).filter(
+    card => card.querySelector('.card-employee-footer')
+  );
+  shuffle(employeeCards);
+  employeeCards.forEach((card, i) => {
+    card.style.display = i < 8 ? '' : 'none';
+    layout.insertBefore(card, firstDivider);
+  });
+
+  // Management cards — shuffle within their section
+  const mgmtIds = ['18','19','20','21','22','23'];
+  const mgmtCards = Array.from(layout.querySelectorAll('.card')).filter(
+    card => mgmtIds.some(id => card.querySelector('[data-card="' + id + '"]'))
+  );
+  shuffle(mgmtCards);
+  mgmtCards.forEach(card => layout.insertBefore(card, ninaDivider));
+}
+
+document.addEventListener('DOMContentLoaded', shuffleCards);
+if (document.readyState !== 'loading') shuffleCards();
 
 // ── COMPOSE INPUT ──
 document.getElementById('compose-input').addEventListener('click', openSubmitForm);
