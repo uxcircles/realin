@@ -316,8 +316,57 @@ body {
   background: none; border: none;
   padding: 5px 10px; border-radius: 8px; cursor: pointer;
   transition: background 0.12s, color 0.12s;
+  position: relative;
 }
 .act:hover { background: var(--cream-dark); color: var(--ink-mid); }
+.act-like.liked { color: var(--red); }
+
+/* Reaction picker */
+.reaction-picker {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 6px 10px;
+  display: none;
+  gap: 4px;
+  box-shadow: 0 4px 20px rgba(28,27,25,0.12);
+  z-index: 100;
+  white-space: nowrap;
+}
+.reaction-picker.visible { display: flex; }
+.reaction-option {
+  font-size: 20px;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 50%;
+  transition: transform 0.15s;
+  line-height: 1;
+  position: relative;
+}
+.reaction-option:hover { transform: scale(1.35); }
+.reaction-option::after {
+  content: attr(data-label);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ink);
+  color: white;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 400;
+  white-space: nowrap;
+  padding: 3px 7px;
+  border-radius: 6px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+}
+.reaction-option:hover::after { opacity: 1; }
 /* ── BACK TO TOP ── */
 .back-to-top {
   position: fixed;
@@ -503,10 +552,19 @@ body {
       <div class="reactions">
         <span class="reaction-emojis">💀❤️😮</span>
         <span class="like-count" id="likes-1">193</span>
-        · <span id="comment-count-1">0</span> comments
+        · <button onclick="toggleComments(1)" style="font-family:\'Inter\',sans-serif;background:none;border:none;cursor:pointer;font-size:12px;color:var(--ink-faint);padding:0;font-weight:300;"><span id="comment-count-1">0</span> comments</button>
       </div>
       <div class="actions">
-        <button class="act act-like" onclick="toggleLike(1, this)">👍 Relate</button>
+        <button class="act act-like" id="like-btn-1" onmouseenter="showPicker(1)" onmouseleave="hidePicker(1)" onclick="handleLikeClick(1)" ontouchstart="handleTouchStart(1, event)" ontouchend="handleTouchEnd(1, event)">
+          <div class="reaction-picker" id="picker-1" onmouseenter="keepPicker(1)" onmouseleave="hidePicker(1)">
+            <span class="reaction-option" data-label="Relatable" data-emoji="❤️" data-cid="1" onclick="handleReactionClick(this, event)">❤️</span>
+            <span class="reaction-option" data-label="Frustrating" data-emoji="😤" data-cid="1" onclick="handleReactionClick(this, event)">😤</span>
+            <span class="reaction-option" data-label="Killed me" data-emoji="💀" data-cid="1" onclick="handleReactionClick(this, event)">💀</span>
+            <span class="reaction-option" data-label="Not alone" data-emoji="🫂" data-cid="1" onclick="handleReactionClick(this, event)">🫂</span>
+            <span class="reaction-option" data-label="Too real" data-emoji="😂" data-cid="1" onclick="handleReactionClick(this, event)">😂</span>
+          </div>
+          <span id="like-emoji-1">❤️</span> Relate
+        </button>
         <button class="act act-comment" onclick="toggleComments(1)">💬 Comment</button>
         <button class="act act-share" onclick="openShare(1)">↗ Share</button>
       </div>
@@ -563,10 +621,19 @@ body {
       <div class="reactions">
         <span class="reaction-emojis">💀🫂❤️</span>
         <span class="like-count" id="likes-2">84</span>
-        · <span id="comment-count-2">0</span> comments
+        · <button onclick="toggleComments(2)" style="font-family:\'Inter\',sans-serif;background:none;border:none;cursor:pointer;font-size:12px;color:var(--ink-faint);padding:0;font-weight:300;"><span id="comment-count-2">0</span> comments</button>
       </div>
       <div class="actions">
-        <button class="act act-like" onclick="toggleLike(2, this)">👍 Relate</button>
+        <button class="act act-like" id="like-btn-2" onmouseenter="showPicker(2)" onmouseleave="hidePicker(2)" onclick="handleLikeClick(2)" ontouchstart="handleTouchStart(2, event)" ontouchend="handleTouchEnd(2, event)">
+          <div class="reaction-picker" id="picker-2" onmouseenter="keepPicker(2)" onmouseleave="hidePicker(2)">
+            <span class="reaction-option" data-label="Relatable" data-emoji="❤️" data-cid="2" onclick="handleReactionClick(this, event)">❤️</span>
+            <span class="reaction-option" data-label="Frustrating" data-emoji="😤" data-cid="2" onclick="handleReactionClick(this, event)">😤</span>
+            <span class="reaction-option" data-label="Killed me" data-emoji="💀" data-cid="2" onclick="handleReactionClick(this, event)">💀</span>
+            <span class="reaction-option" data-label="Not alone" data-emoji="🫂" data-cid="2" onclick="handleReactionClick(this, event)">🫂</span>
+            <span class="reaction-option" data-label="Too real" data-emoji="😂" data-cid="2" onclick="handleReactionClick(this, event)">😂</span>
+          </div>
+          <span id="like-emoji-2">❤️</span> Relate
+        </button>
         <button class="act act-comment" onclick="toggleComments(2)">💬 Comment</button>
         <button class="act act-share" onclick="openShare(2)">↗ Share</button>
       </div>
@@ -621,10 +688,19 @@ body {
       <div class="reactions">
         <span class="reaction-emojis">😤💀❤️</span>
         <span class="like-count" id="likes-3">23</span>
-        · <span id="comment-count-3">0</span> comments
+        · <button onclick="toggleComments(3)" style="font-family:\'Inter\',sans-serif;background:none;border:none;cursor:pointer;font-size:12px;color:var(--ink-faint);padding:0;font-weight:300;"><span id="comment-count-3">0</span> comments</button>
       </div>
       <div class="actions">
-        <button class="act act-like" onclick="toggleLike(3, this)">👍 Relate</button>
+        <button class="act act-like" id="like-btn-3" onmouseenter="showPicker(3)" onmouseleave="hidePicker(3)" onclick="handleLikeClick(3)" ontouchstart="handleTouchStart(3, event)" ontouchend="handleTouchEnd(3, event)">
+          <div class="reaction-picker" id="picker-3" onmouseenter="keepPicker(3)" onmouseleave="hidePicker(3)">
+            <span class="reaction-option" data-label="Relatable" data-emoji="❤️" data-cid="3" onclick="handleReactionClick(this, event)">❤️</span>
+            <span class="reaction-option" data-label="Frustrating" data-emoji="😤" data-cid="3" onclick="handleReactionClick(this, event)">😤</span>
+            <span class="reaction-option" data-label="Killed me" data-emoji="💀" data-cid="3" onclick="handleReactionClick(this, event)">💀</span>
+            <span class="reaction-option" data-label="Not alone" data-emoji="🫂" data-cid="3" onclick="handleReactionClick(this, event)">🫂</span>
+            <span class="reaction-option" data-label="Too real" data-emoji="😂" data-cid="3" onclick="handleReactionClick(this, event)">😂</span>
+          </div>
+          <span id="like-emoji-3">❤️</span> Relate
+        </button>
         <button class="act act-comment" onclick="toggleComments(3)">💬 Comment</button>
         <button class="act act-share" onclick="openShare(3)">↗ Share</button>
       </div>
@@ -679,10 +755,19 @@ body {
       <div class="reactions">
         <span class="reaction-emojis">🫂❤️💀</span>
         <span class="like-count" id="likes-4">57</span>
-        · <span id="comment-count-4">0</span> comments
+        · <button onclick="toggleComments(4)" style="font-family:\'Inter\',sans-serif;background:none;border:none;cursor:pointer;font-size:12px;color:var(--ink-faint);padding:0;font-weight:300;"><span id="comment-count-4">0</span> comments</button>
       </div>
       <div class="actions">
-        <button class="act act-like" onclick="toggleLike(4, this)">👍 Relate</button>
+        <button class="act act-like" id="like-btn-4" onmouseenter="showPicker(4)" onmouseleave="hidePicker(4)" onclick="handleLikeClick(4)" ontouchstart="handleTouchStart(4, event)" ontouchend="handleTouchEnd(4, event)">
+          <div class="reaction-picker" id="picker-4" onmouseenter="keepPicker(4)" onmouseleave="hidePicker(4)">
+            <span class="reaction-option" data-label="Relatable" data-emoji="❤️" data-cid="4" onclick="handleReactionClick(this, event)">❤️</span>
+            <span class="reaction-option" data-label="Frustrating" data-emoji="😤" data-cid="4" onclick="handleReactionClick(this, event)">😤</span>
+            <span class="reaction-option" data-label="Killed me" data-emoji="💀" data-cid="4" onclick="handleReactionClick(this, event)">💀</span>
+            <span class="reaction-option" data-label="Not alone" data-emoji="🫂" data-cid="4" onclick="handleReactionClick(this, event)">🫂</span>
+            <span class="reaction-option" data-label="Too real" data-emoji="😂" data-cid="4" onclick="handleReactionClick(this, event)">😂</span>
+          </div>
+          <span id="like-emoji-4">❤️</span> Relate
+        </button>
         <button class="act act-comment" onclick="toggleComments(4)">💬 Comment</button>
         <button class="act act-share" onclick="openShare(4)">↗ Share</button>
       </div>
@@ -738,10 +823,19 @@ body {
       <div class="reactions">
         <span class="reaction-emojis">❤️💀🫂</span>
         <span class="like-count" id="likes-5">412</span>
-        · <span id="comment-count-5">0</span> comments
+        · <button onclick="toggleComments(5)" style="font-family:\'Inter\',sans-serif;background:none;border:none;cursor:pointer;font-size:12px;color:var(--ink-faint);padding:0;font-weight:300;"><span id="comment-count-5">0</span> comments</button>
       </div>
       <div class="actions">
-        <button class="act act-like" onclick="toggleLike(5, this)">👍 Relate</button>
+        <button class="act act-like" id="like-btn-5" onmouseenter="showPicker(5)" onmouseleave="hidePicker(5)" onclick="handleLikeClick(5)" ontouchstart="handleTouchStart(5, event)" ontouchend="handleTouchEnd(5, event)">
+          <div class="reaction-picker" id="picker-5" onmouseenter="keepPicker(5)" onmouseleave="hidePicker(5)">
+            <span class="reaction-option" data-label="Relatable" data-emoji="❤️" data-cid="5" onclick="handleReactionClick(this, event)">❤️</span>
+            <span class="reaction-option" data-label="Frustrating" data-emoji="😤" data-cid="5" onclick="handleReactionClick(this, event)">😤</span>
+            <span class="reaction-option" data-label="Killed me" data-emoji="💀" data-cid="5" onclick="handleReactionClick(this, event)">💀</span>
+            <span class="reaction-option" data-label="Not alone" data-emoji="🫂" data-cid="5" onclick="handleReactionClick(this, event)">🫂</span>
+            <span class="reaction-option" data-label="Too real" data-emoji="😂" data-cid="5" onclick="handleReactionClick(this, event)">😂</span>
+          </div>
+          <span id="like-emoji-5">❤️</span> Relate
+        </button>
         <button class="act act-comment" onclick="toggleComments(5)">💬 Comment</button>
         <button class="act act-share" onclick="openShare(5)">↗ Share</button>
       </div>
@@ -798,10 +892,19 @@ body {
       <div class="reactions">
         <span class="reaction-emojis">🫂💀❤️</span>
         <span class="like-count" id="likes-6">1200</span>
-        · <span id="comment-count-6">0</span> comments
+        · <button onclick="toggleComments(6)" style="font-family:\'Inter\',sans-serif;background:none;border:none;cursor:pointer;font-size:12px;color:var(--ink-faint);padding:0;font-weight:300;"><span id="comment-count-6">0</span> comments</button>
       </div>
       <div class="actions">
-        <button class="act act-like" onclick="toggleLike(6, this)">👍 Relate</button>
+        <button class="act act-like" id="like-btn-6" onmouseenter="showPicker(6)" onmouseleave="hidePicker(6)" onclick="handleLikeClick(6)" ontouchstart="handleTouchStart(6, event)" ontouchend="handleTouchEnd(6, event)">
+          <div class="reaction-picker" id="picker-6" onmouseenter="keepPicker(6)" onmouseleave="hidePicker(6)">
+            <span class="reaction-option" data-label="Relatable" data-emoji="❤️" data-cid="6" onclick="handleReactionClick(this, event)">❤️</span>
+            <span class="reaction-option" data-label="Frustrating" data-emoji="😤" data-cid="6" onclick="handleReactionClick(this, event)">😤</span>
+            <span class="reaction-option" data-label="Killed me" data-emoji="💀" data-cid="6" onclick="handleReactionClick(this, event)">💀</span>
+            <span class="reaction-option" data-label="Not alone" data-emoji="🫂" data-cid="6" onclick="handleReactionClick(this, event)">🫂</span>
+            <span class="reaction-option" data-label="Too real" data-emoji="😂" data-cid="6" onclick="handleReactionClick(this, event)">😂</span>
+          </div>
+          <span id="like-emoji-6">❤️</span> Relate
+        </button>
         <button class="act act-comment" onclick="toggleComments(6)">💬 Comment</button>
         <button class="act act-share" onclick="openShare(6)">↗ Share</button>
       </div>
@@ -860,10 +963,19 @@ body {
       <div class="reactions">
         <span class="reaction-emojis">💀😤🫂</span>
         <span class="like-count" id="likes-7">1800</span>
-        · <span id="comment-count-7">0</span> comments
+        · <button onclick="toggleComments(7)" style="font-family:\'Inter\',sans-serif;background:none;border:none;cursor:pointer;font-size:12px;color:var(--ink-faint);padding:0;font-weight:300;"><span id="comment-count-7">0</span> comments</button>
       </div>
       <div class="actions">
-        <button class="act act-like" onclick="toggleLike(7, this)">👍 Relate</button>
+        <button class="act act-like" id="like-btn-7" onmouseenter="showPicker(7)" onmouseleave="hidePicker(7)" onclick="handleLikeClick(7)" ontouchstart="handleTouchStart(7, event)" ontouchend="handleTouchEnd(7, event)">
+          <div class="reaction-picker" id="picker-7" onmouseenter="keepPicker(7)" onmouseleave="hidePicker(7)">
+            <span class="reaction-option" data-label="Relatable" data-emoji="❤️" data-cid="7" onclick="handleReactionClick(this, event)">❤️</span>
+            <span class="reaction-option" data-label="Frustrating" data-emoji="😤" data-cid="7" onclick="handleReactionClick(this, event)">😤</span>
+            <span class="reaction-option" data-label="Killed me" data-emoji="💀" data-cid="7" onclick="handleReactionClick(this, event)">💀</span>
+            <span class="reaction-option" data-label="Not alone" data-emoji="🫂" data-cid="7" onclick="handleReactionClick(this, event)">🫂</span>
+            <span class="reaction-option" data-label="Too real" data-emoji="😂" data-cid="7" onclick="handleReactionClick(this, event)">😂</span>
+          </div>
+          <span id="like-emoji-7">❤️</span> Relate
+        </button>
         <button class="act act-comment" onclick="toggleComments(7)">💬 Comment</button>
         <button class="act act-share" onclick="openShare(7)">↗ Share</button>
       </div>
@@ -918,10 +1030,19 @@ body {
       <div class="reactions">
         <span class="reaction-emojis">💀😤❤️</span>
         <span class="like-count" id="likes-8">2100</span>
-        · <span id="comment-count-8">0</span> comments
+        · <button onclick="toggleComments(8)" style="font-family:\'Inter\',sans-serif;background:none;border:none;cursor:pointer;font-size:12px;color:var(--ink-faint);padding:0;font-weight:300;"><span id="comment-count-8">0</span> comments</button>
       </div>
       <div class="actions">
-        <button class="act act-like" onclick="toggleLike(8, this)">👍 Relate</button>
+        <button class="act act-like" id="like-btn-8" onmouseenter="showPicker(8)" onmouseleave="hidePicker(8)" onclick="handleLikeClick(8)" ontouchstart="handleTouchStart(8, event)" ontouchend="handleTouchEnd(8, event)">
+          <div class="reaction-picker" id="picker-8" onmouseenter="keepPicker(8)" onmouseleave="hidePicker(8)">
+            <span class="reaction-option" data-label="Relatable" data-emoji="❤️" data-cid="8" onclick="handleReactionClick(this, event)">❤️</span>
+            <span class="reaction-option" data-label="Frustrating" data-emoji="😤" data-cid="8" onclick="handleReactionClick(this, event)">😤</span>
+            <span class="reaction-option" data-label="Killed me" data-emoji="💀" data-cid="8" onclick="handleReactionClick(this, event)">💀</span>
+            <span class="reaction-option" data-label="Not alone" data-emoji="🫂" data-cid="8" onclick="handleReactionClick(this, event)">🫂</span>
+            <span class="reaction-option" data-label="Too real" data-emoji="😂" data-cid="8" onclick="handleReactionClick(this, event)">😂</span>
+          </div>
+          <span id="like-emoji-8">❤️</span> Relate
+        </button>
         <button class="act act-comment" onclick="toggleComments(8)">💬 Comment</button>
         <button class="act act-share" onclick="openShare(8)">↗ Share</button>
       </div>
@@ -975,10 +1096,19 @@ body {
       <div class="reactions">
         <span class="reaction-emojis">💀😭❤️</span>
         <span class="like-count" id="likes-9">4400</span>
-        · <span id="comment-count-9">0</span> comments
+        · <button onclick="toggleComments(9)" style="font-family:\'Inter\',sans-serif;background:none;border:none;cursor:pointer;font-size:12px;color:var(--ink-faint);padding:0;font-weight:300;"><span id="comment-count-9">0</span> comments</button>
       </div>
       <div class="actions">
-        <button class="act act-like" onclick="toggleLike(9, this)">👍 Relate</button>
+        <button class="act act-like" id="like-btn-9" onmouseenter="showPicker(9)" onmouseleave="hidePicker(9)" onclick="handleLikeClick(9)" ontouchstart="handleTouchStart(9, event)" ontouchend="handleTouchEnd(9, event)">
+          <div class="reaction-picker" id="picker-9" onmouseenter="keepPicker(9)" onmouseleave="hidePicker(9)">
+            <span class="reaction-option" data-label="Relatable" data-emoji="❤️" data-cid="9" onclick="handleReactionClick(this, event)">❤️</span>
+            <span class="reaction-option" data-label="Frustrating" data-emoji="😤" data-cid="9" onclick="handleReactionClick(this, event)">😤</span>
+            <span class="reaction-option" data-label="Killed me" data-emoji="💀" data-cid="9" onclick="handleReactionClick(this, event)">💀</span>
+            <span class="reaction-option" data-label="Not alone" data-emoji="🫂" data-cid="9" onclick="handleReactionClick(this, event)">🫂</span>
+            <span class="reaction-option" data-label="Too real" data-emoji="😂" data-cid="9" onclick="handleReactionClick(this, event)">😂</span>
+          </div>
+          <span id="like-emoji-9">❤️</span> Relate
+        </button>
         <button class="act act-comment" onclick="toggleComments(9)">💬 Comment</button>
         <button class="act act-share" onclick="openShare(9)">↗ Share</button>
       </div>
@@ -1033,10 +1163,19 @@ body {
       <div class="reactions">
         <span class="reaction-emojis">💀😤🫂</span>
         <span class="like-count" id="likes-10">5200</span>
-        · <span id="comment-count-10">0</span> comments
+        · <button onclick="toggleComments(10)" style="font-family:\'Inter\',sans-serif;background:none;border:none;cursor:pointer;font-size:12px;color:var(--ink-faint);padding:0;font-weight:300;"><span id="comment-count-10">0</span> comments</button>
       </div>
       <div class="actions">
-        <button class="act act-like" onclick="toggleLike(10, this)">👍 Relate</button>
+        <button class="act act-like" id="like-btn-10" onmouseenter="showPicker(10)" onmouseleave="hidePicker(10)" onclick="handleLikeClick(10)" ontouchstart="handleTouchStart(10, event)" ontouchend="handleTouchEnd(10, event)">
+          <div class="reaction-picker" id="picker-10" onmouseenter="keepPicker(10)" onmouseleave="hidePicker(10)">
+            <span class="reaction-option" data-label="Relatable" data-emoji="❤️" data-cid="10" onclick="handleReactionClick(this, event)">❤️</span>
+            <span class="reaction-option" data-label="Frustrating" data-emoji="😤" data-cid="10" onclick="handleReactionClick(this, event)">😤</span>
+            <span class="reaction-option" data-label="Killed me" data-emoji="💀" data-cid="10" onclick="handleReactionClick(this, event)">💀</span>
+            <span class="reaction-option" data-label="Not alone" data-emoji="🫂" data-cid="10" onclick="handleReactionClick(this, event)">🫂</span>
+            <span class="reaction-option" data-label="Too real" data-emoji="😂" data-cid="10" onclick="handleReactionClick(this, event)">😂</span>
+          </div>
+          <span id="like-emoji-10">❤️</span> Relate
+        </button>
         <button class="act act-comment" onclick="toggleComments(10)">💬 Comment</button>
         <button class="act act-share" onclick="openShare(10)">↗ Share</button>
       </div>
@@ -1092,10 +1231,19 @@ body {
       <div class="reactions">
         <span class="reaction-emojis">💀😂🫂</span>
         <span class="like-count" id="likes-11">1600</span>
-        · <span id="comment-count-11">0</span> comments
+        · <button onclick="toggleComments(11)" style="font-family:\'Inter\',sans-serif;background:none;border:none;cursor:pointer;font-size:12px;color:var(--ink-faint);padding:0;font-weight:300;"><span id="comment-count-11">0</span> comments</button>
       </div>
       <div class="actions">
-        <button class="act act-like" onclick="toggleLike(11, this)">👍 Relate</button>
+        <button class="act act-like" id="like-btn-11" onmouseenter="showPicker(11)" onmouseleave="hidePicker(11)" onclick="handleLikeClick(11)" ontouchstart="handleTouchStart(11, event)" ontouchend="handleTouchEnd(11, event)">
+          <div class="reaction-picker" id="picker-11" onmouseenter="keepPicker(11)" onmouseleave="hidePicker(11)">
+            <span class="reaction-option" data-label="Relatable" data-emoji="❤️" data-cid="11" onclick="handleReactionClick(this, event)">❤️</span>
+            <span class="reaction-option" data-label="Frustrating" data-emoji="😤" data-cid="11" onclick="handleReactionClick(this, event)">😤</span>
+            <span class="reaction-option" data-label="Killed me" data-emoji="💀" data-cid="11" onclick="handleReactionClick(this, event)">💀</span>
+            <span class="reaction-option" data-label="Not alone" data-emoji="🫂" data-cid="11" onclick="handleReactionClick(this, event)">🫂</span>
+            <span class="reaction-option" data-label="Too real" data-emoji="😂" data-cid="11" onclick="handleReactionClick(this, event)">😂</span>
+          </div>
+          <span id="like-emoji-11">❤️</span> Relate
+        </button>
         <button class="act act-comment" onclick="toggleComments(11)">💬 Comment</button>
         <button class="act act-share" onclick="openShare(11)">↗ Share</button>
       </div>
@@ -1149,10 +1297,19 @@ body {
       <div class="reactions">
         <span class="reaction-emojis">💀😭❤️</span>
         <span class="like-count" id="likes-12">3300</span>
-        · <span id="comment-count-12">0</span> comments
+        · <button onclick="toggleComments(12)" style="font-family:\'Inter\',sans-serif;background:none;border:none;cursor:pointer;font-size:12px;color:var(--ink-faint);padding:0;font-weight:300;"><span id="comment-count-12">0</span> comments</button>
       </div>
       <div class="actions">
-        <button class="act act-like" onclick="toggleLike(12, this)">👍 Relate</button>
+        <button class="act act-like" id="like-btn-12" onmouseenter="showPicker(12)" onmouseleave="hidePicker(12)" onclick="handleLikeClick(12)" ontouchstart="handleTouchStart(12, event)" ontouchend="handleTouchEnd(12, event)">
+          <div class="reaction-picker" id="picker-12" onmouseenter="keepPicker(12)" onmouseleave="hidePicker(12)">
+            <span class="reaction-option" data-label="Relatable" data-emoji="❤️" data-cid="12" onclick="handleReactionClick(this, event)">❤️</span>
+            <span class="reaction-option" data-label="Frustrating" data-emoji="😤" data-cid="12" onclick="handleReactionClick(this, event)">😤</span>
+            <span class="reaction-option" data-label="Killed me" data-emoji="💀" data-cid="12" onclick="handleReactionClick(this, event)">💀</span>
+            <span class="reaction-option" data-label="Not alone" data-emoji="🫂" data-cid="12" onclick="handleReactionClick(this, event)">🫂</span>
+            <span class="reaction-option" data-label="Too real" data-emoji="😂" data-cid="12" onclick="handleReactionClick(this, event)">😂</span>
+          </div>
+          <span id="like-emoji-12">❤️</span> Relate
+        </button>
         <button class="act act-comment" onclick="toggleComments(12)">💬 Comment</button>
         <button class="act act-share" onclick="openShare(12)">↗ Share</button>
       </div>
@@ -1209,10 +1366,19 @@ body {
       <div class="reactions">
         <span class="reaction-emojis">😤💀❤️</span>
         <span class="like-count" id="likes-13">7800</span>
-        · <span id="comment-count-13">0</span> comments
+        · <button onclick="toggleComments(13)" style="font-family:\'Inter\',sans-serif;background:none;border:none;cursor:pointer;font-size:12px;color:var(--ink-faint);padding:0;font-weight:300;"><span id="comment-count-13">0</span> comments</button>
       </div>
       <div class="actions">
-        <button class="act act-like" onclick="toggleLike(13, this)">👍 Relate</button>
+        <button class="act act-like" id="like-btn-13" onmouseenter="showPicker(13)" onmouseleave="hidePicker(13)" onclick="handleLikeClick(13)" ontouchstart="handleTouchStart(13, event)" ontouchend="handleTouchEnd(13, event)">
+          <div class="reaction-picker" id="picker-13" onmouseenter="keepPicker(13)" onmouseleave="hidePicker(13)">
+            <span class="reaction-option" data-label="Relatable" data-emoji="❤️" data-cid="13" onclick="handleReactionClick(this, event)">❤️</span>
+            <span class="reaction-option" data-label="Frustrating" data-emoji="😤" data-cid="13" onclick="handleReactionClick(this, event)">😤</span>
+            <span class="reaction-option" data-label="Killed me" data-emoji="💀" data-cid="13" onclick="handleReactionClick(this, event)">💀</span>
+            <span class="reaction-option" data-label="Not alone" data-emoji="🫂" data-cid="13" onclick="handleReactionClick(this, event)">🫂</span>
+            <span class="reaction-option" data-label="Too real" data-emoji="😂" data-cid="13" onclick="handleReactionClick(this, event)">😂</span>
+          </div>
+          <span id="like-emoji-13">❤️</span> Relate
+        </button>
         <button class="act act-comment" onclick="toggleComments(13)">💬 Comment</button>
         <button class="act act-share" onclick="openShare(13)">↗ Share</button>
       </div>
@@ -1266,10 +1432,19 @@ body {
       <div class="reactions">
         <span class="reaction-emojis">😂💀❤️</span>
         <span class="like-count" id="likes-14">9100</span>
-        · <span id="comment-count-14">0</span> comments
+        · <button onclick="toggleComments(14)" style="font-family:\'Inter\',sans-serif;background:none;border:none;cursor:pointer;font-size:12px;color:var(--ink-faint);padding:0;font-weight:300;"><span id="comment-count-14">0</span> comments</button>
       </div>
       <div class="actions">
-        <button class="act act-like" onclick="toggleLike(14, this)">👍 Relate</button>
+        <button class="act act-like" id="like-btn-14" onmouseenter="showPicker(14)" onmouseleave="hidePicker(14)" onclick="handleLikeClick(14)" ontouchstart="handleTouchStart(14, event)" ontouchend="handleTouchEnd(14, event)">
+          <div class="reaction-picker" id="picker-14" onmouseenter="keepPicker(14)" onmouseleave="hidePicker(14)">
+            <span class="reaction-option" data-label="Relatable" data-emoji="❤️" data-cid="14" onclick="handleReactionClick(this, event)">❤️</span>
+            <span class="reaction-option" data-label="Frustrating" data-emoji="😤" data-cid="14" onclick="handleReactionClick(this, event)">😤</span>
+            <span class="reaction-option" data-label="Killed me" data-emoji="💀" data-cid="14" onclick="handleReactionClick(this, event)">💀</span>
+            <span class="reaction-option" data-label="Not alone" data-emoji="🫂" data-cid="14" onclick="handleReactionClick(this, event)">🫂</span>
+            <span class="reaction-option" data-label="Too real" data-emoji="😂" data-cid="14" onclick="handleReactionClick(this, event)">😂</span>
+          </div>
+          <span id="like-emoji-14">❤️</span> Relate
+        </button>
         <button class="act act-comment" onclick="toggleComments(14)">💬 Comment</button>
         <button class="act act-share" onclick="openShare(14)">↗ Share</button>
       </div>
@@ -1324,10 +1499,19 @@ body {
       <div class="reactions">
         <span class="reaction-emojis">😤💀😮</span>
         <span class="like-count" id="likes-15">6600</span>
-        · <span id="comment-count-15">0</span> comments
+        · <button onclick="toggleComments(15)" style="font-family:\'Inter\',sans-serif;background:none;border:none;cursor:pointer;font-size:12px;color:var(--ink-faint);padding:0;font-weight:300;"><span id="comment-count-15">0</span> comments</button>
       </div>
       <div class="actions">
-        <button class="act act-like" onclick="toggleLike(15, this)">👍 Relate</button>
+        <button class="act act-like" id="like-btn-15" onmouseenter="showPicker(15)" onmouseleave="hidePicker(15)" onclick="handleLikeClick(15)" ontouchstart="handleTouchStart(15, event)" ontouchend="handleTouchEnd(15, event)">
+          <div class="reaction-picker" id="picker-15" onmouseenter="keepPicker(15)" onmouseleave="hidePicker(15)">
+            <span class="reaction-option" data-label="Relatable" data-emoji="❤️" data-cid="15" onclick="handleReactionClick(this, event)">❤️</span>
+            <span class="reaction-option" data-label="Frustrating" data-emoji="😤" data-cid="15" onclick="handleReactionClick(this, event)">😤</span>
+            <span class="reaction-option" data-label="Killed me" data-emoji="💀" data-cid="15" onclick="handleReactionClick(this, event)">💀</span>
+            <span class="reaction-option" data-label="Not alone" data-emoji="🫂" data-cid="15" onclick="handleReactionClick(this, event)">🫂</span>
+            <span class="reaction-option" data-label="Too real" data-emoji="😂" data-cid="15" onclick="handleReactionClick(this, event)">😂</span>
+          </div>
+          <span id="like-emoji-15">❤️</span> Relate
+        </button>
         <button class="act act-comment" onclick="toggleComments(15)">💬 Comment</button>
         <button class="act act-share" onclick="openShare(15)">↗ Share</button>
       </div>
@@ -1383,10 +1567,19 @@ body {
       <div class="reactions">
         <span class="reaction-emojis">💀😤🫂</span>
         <span class="like-count" id="likes-16">8300</span>
-        · <span id="comment-count-16">0</span> comments
+        · <button onclick="toggleComments(16)" style="font-family:\'Inter\',sans-serif;background:none;border:none;cursor:pointer;font-size:12px;color:var(--ink-faint);padding:0;font-weight:300;"><span id="comment-count-16">0</span> comments</button>
       </div>
       <div class="actions">
-        <button class="act act-like" onclick="toggleLike(16, this)">👍 Relate</button>
+        <button class="act act-like" id="like-btn-16" onmouseenter="showPicker(16)" onmouseleave="hidePicker(16)" onclick="handleLikeClick(16)" ontouchstart="handleTouchStart(16, event)" ontouchend="handleTouchEnd(16, event)">
+          <div class="reaction-picker" id="picker-16" onmouseenter="keepPicker(16)" onmouseleave="hidePicker(16)">
+            <span class="reaction-option" data-label="Relatable" data-emoji="❤️" data-cid="16" onclick="handleReactionClick(this, event)">❤️</span>
+            <span class="reaction-option" data-label="Frustrating" data-emoji="😤" data-cid="16" onclick="handleReactionClick(this, event)">😤</span>
+            <span class="reaction-option" data-label="Killed me" data-emoji="💀" data-cid="16" onclick="handleReactionClick(this, event)">💀</span>
+            <span class="reaction-option" data-label="Not alone" data-emoji="🫂" data-cid="16" onclick="handleReactionClick(this, event)">🫂</span>
+            <span class="reaction-option" data-label="Too real" data-emoji="😂" data-cid="16" onclick="handleReactionClick(this, event)">😂</span>
+          </div>
+          <span id="like-emoji-16">❤️</span> Relate
+        </button>
         <button class="act act-comment" onclick="toggleComments(16)">💬 Comment</button>
         <button class="act act-share" onclick="openShare(16)">↗ Share</button>
       </div>
@@ -1447,10 +1640,19 @@ body {
       <div class="reactions">
         <span class="reaction-emojis">🫂</span>
         <span class="like-count" id="likes-18">934</span>
-        · <span id="comment-count-18">0</span> comments
+        · <button onclick="toggleComments(18)" style="font-family:\'Inter\',sans-serif;background:none;border:none;cursor:pointer;font-size:12px;color:var(--ink-faint);padding:0;font-weight:300;"><span id="comment-count-18">0</span> comments</button>
       </div>
       <div class="actions">
-        <button class="act act-like" onclick="toggleLike(18, this)">👍 Relate</button>
+        <button class="act act-like" id="like-btn-18" onmouseenter="showPicker(18)" onmouseleave="hidePicker(18)" onclick="handleLikeClick(18)" ontouchstart="handleTouchStart(18, event)" ontouchend="handleTouchEnd(18, event)">
+          <div class="reaction-picker" id="picker-18" onmouseenter="keepPicker(18)" onmouseleave="hidePicker(18)">
+            <span class="reaction-option" data-label="Relatable" data-emoji="❤️" data-cid="18" onclick="handleReactionClick(this, event)">❤️</span>
+            <span class="reaction-option" data-label="Frustrating" data-emoji="😤" data-cid="18" onclick="handleReactionClick(this, event)">😤</span>
+            <span class="reaction-option" data-label="Killed me" data-emoji="💀" data-cid="18" onclick="handleReactionClick(this, event)">💀</span>
+            <span class="reaction-option" data-label="Not alone" data-emoji="🫂" data-cid="18" onclick="handleReactionClick(this, event)">🫂</span>
+            <span class="reaction-option" data-label="Too real" data-emoji="😂" data-cid="18" onclick="handleReactionClick(this, event)">😂</span>
+          </div>
+          <span id="like-emoji-18">❤️</span> Relate
+        </button>
         <button class="act act-comment" onclick="toggleComments(18)">💬 Comment</button>
         <button class="act act-share" onclick="openShare(18)">↗ Share</button>
       </div>
@@ -1505,10 +1707,19 @@ body {
       <div class="reactions">
         <span class="reaction-emojis">😤💀</span>
         <span class="like-count" id="likes-19">1.6k</span>
-        · <span id="comment-count-19">0</span> comments
+        · <button onclick="toggleComments(19)" style="font-family:\'Inter\',sans-serif;background:none;border:none;cursor:pointer;font-size:12px;color:var(--ink-faint);padding:0;font-weight:300;"><span id="comment-count-19">0</span> comments</button>
       </div>
       <div class="actions">
-        <button class="act act-like" onclick="toggleLike(19, this)">👍 Relate</button>
+        <button class="act act-like" id="like-btn-19" onmouseenter="showPicker(19)" onmouseleave="hidePicker(19)" onclick="handleLikeClick(19)" ontouchstart="handleTouchStart(19, event)" ontouchend="handleTouchEnd(19, event)">
+          <div class="reaction-picker" id="picker-19" onmouseenter="keepPicker(19)" onmouseleave="hidePicker(19)">
+            <span class="reaction-option" data-label="Relatable" data-emoji="❤️" data-cid="19" onclick="handleReactionClick(this, event)">❤️</span>
+            <span class="reaction-option" data-label="Frustrating" data-emoji="😤" data-cid="19" onclick="handleReactionClick(this, event)">😤</span>
+            <span class="reaction-option" data-label="Killed me" data-emoji="💀" data-cid="19" onclick="handleReactionClick(this, event)">💀</span>
+            <span class="reaction-option" data-label="Not alone" data-emoji="🫂" data-cid="19" onclick="handleReactionClick(this, event)">🫂</span>
+            <span class="reaction-option" data-label="Too real" data-emoji="😂" data-cid="19" onclick="handleReactionClick(this, event)">😂</span>
+          </div>
+          <span id="like-emoji-19">❤️</span> Relate
+        </button>
         <button class="act act-comment" onclick="toggleComments(19)">💬 Comment</button>
         <button class="act act-share" onclick="openShare(19)">↗ Share</button>
       </div>
@@ -1564,10 +1775,19 @@ body {
       <div class="reactions">
         <span class="reaction-emojis">💀😤🫂</span>
         <span class="like-count" id="likes-20">2.1k</span>
-        · <span id="comment-count-20">0</span> comments
+        · <button onclick="toggleComments(20)" style="font-family:\'Inter\',sans-serif;background:none;border:none;cursor:pointer;font-size:12px;color:var(--ink-faint);padding:0;font-weight:300;"><span id="comment-count-20">0</span> comments</button>
       </div>
       <div class="actions">
-        <button class="act act-like" onclick="toggleLike(20, this)">👍 Relate</button>
+        <button class="act act-like" id="like-btn-20" onmouseenter="showPicker(20)" onmouseleave="hidePicker(20)" onclick="handleLikeClick(20)" ontouchstart="handleTouchStart(20, event)" ontouchend="handleTouchEnd(20, event)">
+          <div class="reaction-picker" id="picker-20" onmouseenter="keepPicker(20)" onmouseleave="hidePicker(20)">
+            <span class="reaction-option" data-label="Relatable" data-emoji="❤️" data-cid="20" onclick="handleReactionClick(this, event)">❤️</span>
+            <span class="reaction-option" data-label="Frustrating" data-emoji="😤" data-cid="20" onclick="handleReactionClick(this, event)">😤</span>
+            <span class="reaction-option" data-label="Killed me" data-emoji="💀" data-cid="20" onclick="handleReactionClick(this, event)">💀</span>
+            <span class="reaction-option" data-label="Not alone" data-emoji="🫂" data-cid="20" onclick="handleReactionClick(this, event)">🫂</span>
+            <span class="reaction-option" data-label="Too real" data-emoji="😂" data-cid="20" onclick="handleReactionClick(this, event)">😂</span>
+          </div>
+          <span id="like-emoji-20">❤️</span> Relate
+        </button>
         <button class="act act-comment" onclick="toggleComments(20)">💬 Comment</button>
         <button class="act act-share" onclick="openShare(20)">↗ Share</button>
       </div>
@@ -1623,10 +1843,19 @@ body {
       <div class="reactions">
         <span class="reaction-emojis">😤💀😂</span>
         <span class="like-count" id="likes-21">3.4k</span>
-        · <span id="comment-count-21">0</span> comments
+        · <button onclick="toggleComments(21)" style="font-family:\'Inter\',sans-serif;background:none;border:none;cursor:pointer;font-size:12px;color:var(--ink-faint);padding:0;font-weight:300;"><span id="comment-count-21">0</span> comments</button>
       </div>
       <div class="actions">
-        <button class="act act-like" onclick="toggleLike(21, this)">👍 Relate</button>
+        <button class="act act-like" id="like-btn-21" onmouseenter="showPicker(21)" onmouseleave="hidePicker(21)" onclick="handleLikeClick(21)" ontouchstart="handleTouchStart(21, event)" ontouchend="handleTouchEnd(21, event)">
+          <div class="reaction-picker" id="picker-21" onmouseenter="keepPicker(21)" onmouseleave="hidePicker(21)">
+            <span class="reaction-option" data-label="Relatable" data-emoji="❤️" data-cid="21" onclick="handleReactionClick(this, event)">❤️</span>
+            <span class="reaction-option" data-label="Frustrating" data-emoji="😤" data-cid="21" onclick="handleReactionClick(this, event)">😤</span>
+            <span class="reaction-option" data-label="Killed me" data-emoji="💀" data-cid="21" onclick="handleReactionClick(this, event)">💀</span>
+            <span class="reaction-option" data-label="Not alone" data-emoji="🫂" data-cid="21" onclick="handleReactionClick(this, event)">🫂</span>
+            <span class="reaction-option" data-label="Too real" data-emoji="😂" data-cid="21" onclick="handleReactionClick(this, event)">😂</span>
+          </div>
+          <span id="like-emoji-21">❤️</span> Relate
+        </button>
         <button class="act act-comment" onclick="toggleComments(21)">💬 Comment</button>
         <button class="act act-share" onclick="openShare(21)">↗ Share</button>
       </div>
@@ -1682,10 +1911,19 @@ body {
       <div class="reactions">
         <span class="reaction-emojis">🫂💀❤️</span>
         <span class="like-count" id="likes-22">4.7k</span>
-        · <span id="comment-count-22">0</span> comments
+        · <button onclick="toggleComments(22)" style="font-family:\'Inter\',sans-serif;background:none;border:none;cursor:pointer;font-size:12px;color:var(--ink-faint);padding:0;font-weight:300;"><span id="comment-count-22">0</span> comments</button>
       </div>
       <div class="actions">
-        <button class="act act-like" onclick="toggleLike(22, this)">👍 Relate</button>
+        <button class="act act-like" id="like-btn-22" onmouseenter="showPicker(22)" onmouseleave="hidePicker(22)" onclick="handleLikeClick(22)" ontouchstart="handleTouchStart(22, event)" ontouchend="handleTouchEnd(22, event)">
+          <div class="reaction-picker" id="picker-22" onmouseenter="keepPicker(22)" onmouseleave="hidePicker(22)">
+            <span class="reaction-option" data-label="Relatable" data-emoji="❤️" data-cid="22" onclick="handleReactionClick(this, event)">❤️</span>
+            <span class="reaction-option" data-label="Frustrating" data-emoji="😤" data-cid="22" onclick="handleReactionClick(this, event)">😤</span>
+            <span class="reaction-option" data-label="Killed me" data-emoji="💀" data-cid="22" onclick="handleReactionClick(this, event)">💀</span>
+            <span class="reaction-option" data-label="Not alone" data-emoji="🫂" data-cid="22" onclick="handleReactionClick(this, event)">🫂</span>
+            <span class="reaction-option" data-label="Too real" data-emoji="😂" data-cid="22" onclick="handleReactionClick(this, event)">😂</span>
+          </div>
+          <span id="like-emoji-22">❤️</span> Relate
+        </button>
         <button class="act act-comment" onclick="toggleComments(22)">💬 Comment</button>
         <button class="act act-share" onclick="openShare(22)">↗ Share</button>
       </div>
@@ -1740,10 +1978,19 @@ body {
       <div class="reactions">
         <span class="reaction-emojis">😂💀😤</span>
         <span class="like-count" id="likes-23">2.8k</span>
-        · <span id="comment-count-23">0</span> comments
+        · <button onclick="toggleComments(23)" style="font-family:\'Inter\',sans-serif;background:none;border:none;cursor:pointer;font-size:12px;color:var(--ink-faint);padding:0;font-weight:300;"><span id="comment-count-23">0</span> comments</button>
       </div>
       <div class="actions">
-        <button class="act act-like" onclick="toggleLike(23, this)">👍 Relate</button>
+        <button class="act act-like" id="like-btn-23" onmouseenter="showPicker(23)" onmouseleave="hidePicker(23)" onclick="handleLikeClick(23)" ontouchstart="handleTouchStart(23, event)" ontouchend="handleTouchEnd(23, event)">
+          <div class="reaction-picker" id="picker-23" onmouseenter="keepPicker(23)" onmouseleave="hidePicker(23)">
+            <span class="reaction-option" data-label="Relatable" data-emoji="❤️" data-cid="23" onclick="handleReactionClick(this, event)">❤️</span>
+            <span class="reaction-option" data-label="Frustrating" data-emoji="😤" data-cid="23" onclick="handleReactionClick(this, event)">😤</span>
+            <span class="reaction-option" data-label="Killed me" data-emoji="💀" data-cid="23" onclick="handleReactionClick(this, event)">💀</span>
+            <span class="reaction-option" data-label="Not alone" data-emoji="🫂" data-cid="23" onclick="handleReactionClick(this, event)">🫂</span>
+            <span class="reaction-option" data-label="Too real" data-emoji="😂" data-cid="23" onclick="handleReactionClick(this, event)">😂</span>
+          </div>
+          <span id="like-emoji-23">❤️</span> Relate
+        </button>
         <button class="act act-comment" onclick="toggleComments(23)">💬 Comment</button>
         <button class="act act-share" onclick="openShare(23)">↗ Share</button>
       </div>
@@ -1797,10 +2044,19 @@ body {
       <div class="reactions">
         <span class="reaction-emojis">💀😤</span>
         <span class="like-count" id="likes-24">2.3k</span>
-        · <span id="comment-count-24">0</span> comments
+        · <button onclick="toggleComments(24)" style="font-family:\'Inter\',sans-serif;background:none;border:none;cursor:pointer;font-size:12px;color:var(--ink-faint);padding:0;font-weight:300;"><span id="comment-count-24">0</span> comments</button>
       </div>
       <div class="actions">
-        <button class="act act-like" onclick="toggleLike(24, this)">👍 Relate</button>
+        <button class="act act-like" id="like-btn-24" onmouseenter="showPicker(24)" onmouseleave="hidePicker(24)" onclick="handleLikeClick(24)" ontouchstart="handleTouchStart(24, event)" ontouchend="handleTouchEnd(24, event)">
+          <div class="reaction-picker" id="picker-24" onmouseenter="keepPicker(24)" onmouseleave="hidePicker(24)">
+            <span class="reaction-option" data-label="Relatable" data-emoji="❤️" data-cid="24" onclick="handleReactionClick(this, event)">❤️</span>
+            <span class="reaction-option" data-label="Frustrating" data-emoji="😤" data-cid="24" onclick="handleReactionClick(this, event)">😤</span>
+            <span class="reaction-option" data-label="Killed me" data-emoji="💀" data-cid="24" onclick="handleReactionClick(this, event)">💀</span>
+            <span class="reaction-option" data-label="Not alone" data-emoji="🫂" data-cid="24" onclick="handleReactionClick(this, event)">🫂</span>
+            <span class="reaction-option" data-label="Too real" data-emoji="😂" data-cid="24" onclick="handleReactionClick(this, event)">😂</span>
+          </div>
+          <span id="like-emoji-24">❤️</span> Relate
+        </button>
         <button class="act act-comment" onclick="toggleComments(24)">💬 Comment</button>
         <button class="act act-share" onclick="openShare(24)">↗ Share</button>
       </div>
@@ -1854,10 +2110,19 @@ body {
       <div class="reactions">
         <span class="reaction-emojis">😤💀</span>
         <span class="like-count" id="likes-25">3.1k</span>
-        · <span id="comment-count-25">0</span> comments
+        · <button onclick="toggleComments(25)" style="font-family:\'Inter\',sans-serif;background:none;border:none;cursor:pointer;font-size:12px;color:var(--ink-faint);padding:0;font-weight:300;"><span id="comment-count-25">0</span> comments</button>
       </div>
       <div class="actions">
-        <button class="act act-like" onclick="toggleLike(25, this)">👍 Relate</button>
+        <button class="act act-like" id="like-btn-25" onmouseenter="showPicker(25)" onmouseleave="hidePicker(25)" onclick="handleLikeClick(25)" ontouchstart="handleTouchStart(25, event)" ontouchend="handleTouchEnd(25, event)">
+          <div class="reaction-picker" id="picker-25" onmouseenter="keepPicker(25)" onmouseleave="hidePicker(25)">
+            <span class="reaction-option" data-label="Relatable" data-emoji="❤️" data-cid="25" onclick="handleReactionClick(this, event)">❤️</span>
+            <span class="reaction-option" data-label="Frustrating" data-emoji="😤" data-cid="25" onclick="handleReactionClick(this, event)">😤</span>
+            <span class="reaction-option" data-label="Killed me" data-emoji="💀" data-cid="25" onclick="handleReactionClick(this, event)">💀</span>
+            <span class="reaction-option" data-label="Not alone" data-emoji="🫂" data-cid="25" onclick="handleReactionClick(this, event)">🫂</span>
+            <span class="reaction-option" data-label="Too real" data-emoji="😂" data-cid="25" onclick="handleReactionClick(this, event)">😂</span>
+          </div>
+          <span id="like-emoji-25">❤️</span> Relate
+        </button>
         <button class="act act-comment" onclick="toggleComments(25)">💬 Comment</button>
         <button class="act act-share" onclick="openShare(25)">↗ Share</button>
       </div>
@@ -1911,10 +2176,19 @@ body {
       <div class="reactions">
         <span class="reaction-emojis">😤💀😂</span>
         <span class="like-count" id="likes-26">5.2k</span>
-        · <span id="comment-count-26">0</span> comments
+        · <button onclick="toggleComments(26)" style="font-family:\'Inter\',sans-serif;background:none;border:none;cursor:pointer;font-size:12px;color:var(--ink-faint);padding:0;font-weight:300;"><span id="comment-count-26">0</span> comments</button>
       </div>
       <div class="actions">
-        <button class="act act-like" onclick="toggleLike(26, this)">👍 Relate</button>
+        <button class="act act-like" id="like-btn-26" onmouseenter="showPicker(26)" onmouseleave="hidePicker(26)" onclick="handleLikeClick(26)" ontouchstart="handleTouchStart(26, event)" ontouchend="handleTouchEnd(26, event)">
+          <div class="reaction-picker" id="picker-26" onmouseenter="keepPicker(26)" onmouseleave="hidePicker(26)">
+            <span class="reaction-option" data-label="Relatable" data-emoji="❤️" data-cid="26" onclick="handleReactionClick(this, event)">❤️</span>
+            <span class="reaction-option" data-label="Frustrating" data-emoji="😤" data-cid="26" onclick="handleReactionClick(this, event)">😤</span>
+            <span class="reaction-option" data-label="Killed me" data-emoji="💀" data-cid="26" onclick="handleReactionClick(this, event)">💀</span>
+            <span class="reaction-option" data-label="Not alone" data-emoji="🫂" data-cid="26" onclick="handleReactionClick(this, event)">🫂</span>
+            <span class="reaction-option" data-label="Too real" data-emoji="😂" data-cid="26" onclick="handleReactionClick(this, event)">😂</span>
+          </div>
+          <span id="like-emoji-26">❤️</span> Relate
+        </button>
         <button class="act act-comment" onclick="toggleComments(26)">💬 Comment</button>
         <button class="act act-share" onclick="openShare(26)">↗ Share</button>
       </div>
@@ -1968,10 +2242,19 @@ body {
       <div class="reactions">
         <span class="reaction-emojis">😤💀❤️</span>
         <span class="like-count" id="likes-27">4.8k</span>
-        · <span id="comment-count-27">0</span> comments
+        · <button onclick="toggleComments(27)" style="font-family:\'Inter\',sans-serif;background:none;border:none;cursor:pointer;font-size:12px;color:var(--ink-faint);padding:0;font-weight:300;"><span id="comment-count-27">0</span> comments</button>
       </div>
       <div class="actions">
-        <button class="act act-like" onclick="toggleLike(27, this)">👍 Relate</button>
+        <button class="act act-like" id="like-btn-27" onmouseenter="showPicker(27)" onmouseleave="hidePicker(27)" onclick="handleLikeClick(27)" ontouchstart="handleTouchStart(27, event)" ontouchend="handleTouchEnd(27, event)">
+          <div class="reaction-picker" id="picker-27" onmouseenter="keepPicker(27)" onmouseleave="hidePicker(27)">
+            <span class="reaction-option" data-label="Relatable" data-emoji="❤️" data-cid="27" onclick="handleReactionClick(this, event)">❤️</span>
+            <span class="reaction-option" data-label="Frustrating" data-emoji="😤" data-cid="27" onclick="handleReactionClick(this, event)">😤</span>
+            <span class="reaction-option" data-label="Killed me" data-emoji="💀" data-cid="27" onclick="handleReactionClick(this, event)">💀</span>
+            <span class="reaction-option" data-label="Not alone" data-emoji="🫂" data-cid="27" onclick="handleReactionClick(this, event)">🫂</span>
+            <span class="reaction-option" data-label="Too real" data-emoji="😂" data-cid="27" onclick="handleReactionClick(this, event)">😂</span>
+          </div>
+          <span id="like-emoji-27">❤️</span> Relate
+        </button>
         <button class="act act-comment" onclick="toggleComments(27)">💬 Comment</button>
         <button class="act act-share" onclick="openShare(27)">↗ Share</button>
       </div>
@@ -2025,10 +2308,19 @@ body {
       <div class="reactions">
         <span class="reaction-emojis">😂💀😤</span>
         <span class="like-count" id="likes-28">3.7k</span>
-        · <span id="comment-count-28">0</span> comments
+        · <button onclick="toggleComments(28)" style="font-family:\'Inter\',sans-serif;background:none;border:none;cursor:pointer;font-size:12px;color:var(--ink-faint);padding:0;font-weight:300;"><span id="comment-count-28">0</span> comments</button>
       </div>
       <div class="actions">
-        <button class="act act-like" onclick="toggleLike(28, this)">👍 Relate</button>
+        <button class="act act-like" id="like-btn-28" onmouseenter="showPicker(28)" onmouseleave="hidePicker(28)" onclick="handleLikeClick(28)" ontouchstart="handleTouchStart(28, event)" ontouchend="handleTouchEnd(28, event)">
+          <div class="reaction-picker" id="picker-28" onmouseenter="keepPicker(28)" onmouseleave="hidePicker(28)">
+            <span class="reaction-option" data-label="Relatable" data-emoji="❤️" data-cid="28" onclick="handleReactionClick(this, event)">❤️</span>
+            <span class="reaction-option" data-label="Frustrating" data-emoji="😤" data-cid="28" onclick="handleReactionClick(this, event)">😤</span>
+            <span class="reaction-option" data-label="Killed me" data-emoji="💀" data-cid="28" onclick="handleReactionClick(this, event)">💀</span>
+            <span class="reaction-option" data-label="Not alone" data-emoji="🫂" data-cid="28" onclick="handleReactionClick(this, event)">🫂</span>
+            <span class="reaction-option" data-label="Too real" data-emoji="😂" data-cid="28" onclick="handleReactionClick(this, event)">😂</span>
+          </div>
+          <span id="like-emoji-28">❤️</span> Relate
+        </button>
         <button class="act act-comment" onclick="toggleComments(28)">💬 Comment</button>
         <button class="act act-share" onclick="openShare(28)">↗ Share</button>
       </div>
@@ -2091,10 +2383,19 @@ body {
       <div class="reactions">
         <span class="reaction-emojis">❤️🌱🫂</span>
         <span class="like-count" id="likes-17">2400</span>
-        · <span id="comment-count-17">0</span> comments
+        · <button onclick="toggleComments(17)" style="font-family:\'Inter\',sans-serif;background:none;border:none;cursor:pointer;font-size:12px;color:var(--ink-faint);padding:0;font-weight:300;"><span id="comment-count-17">0</span> comments</button>
       </div>
       <div class="actions">
-        <button class="act act-like" onclick="toggleLike(17, this)">👍 Relate</button>
+        <button class="act act-like" id="like-btn-17" onmouseenter="showPicker(17)" onmouseleave="hidePicker(17)" onclick="handleLikeClick(17)" ontouchstart="handleTouchStart(17, event)" ontouchend="handleTouchEnd(17, event)">
+          <div class="reaction-picker" id="picker-17" onmouseenter="keepPicker(17)" onmouseleave="hidePicker(17)">
+            <span class="reaction-option" data-label="Relatable" data-emoji="❤️" data-cid="17" onclick="handleReactionClick(this, event)">❤️</span>
+            <span class="reaction-option" data-label="Frustrating" data-emoji="😤" data-cid="17" onclick="handleReactionClick(this, event)">😤</span>
+            <span class="reaction-option" data-label="Killed me" data-emoji="💀" data-cid="17" onclick="handleReactionClick(this, event)">💀</span>
+            <span class="reaction-option" data-label="Not alone" data-emoji="🫂" data-cid="17" onclick="handleReactionClick(this, event)">🫂</span>
+            <span class="reaction-option" data-label="Too real" data-emoji="😂" data-cid="17" onclick="handleReactionClick(this, event)">😂</span>
+          </div>
+          <span id="like-emoji-17">❤️</span> Relate
+        </button>
         <button class="act act-comment" onclick="toggleComments(17)">💬 Comment</button>
         <button class="act act-share" onclick="openShare(17)">↗ Share</button>
       </div>
@@ -2148,10 +2449,19 @@ body {
       <div class="reactions">
         <span class="reaction-emojis">❤️🫂🌱</span>
         <span class="like-count" id="likes-29">5.1k</span>
-        · <span id="comment-count-29">0</span> comments
+        · <button onclick="toggleComments(29)" style="font-family:\'Inter\',sans-serif;background:none;border:none;cursor:pointer;font-size:12px;color:var(--ink-faint);padding:0;font-weight:300;"><span id="comment-count-29">0</span> comments</button>
       </div>
       <div class="actions">
-        <button class="act act-like" onclick="toggleLike(29, this)">👍 Relate</button>
+        <button class="act act-like" id="like-btn-29" onmouseenter="showPicker(29)" onmouseleave="hidePicker(29)" onclick="handleLikeClick(29)" ontouchstart="handleTouchStart(29, event)" ontouchend="handleTouchEnd(29, event)">
+          <div class="reaction-picker" id="picker-29" onmouseenter="keepPicker(29)" onmouseleave="hidePicker(29)">
+            <span class="reaction-option" data-label="Relatable" data-emoji="❤️" data-cid="29" onclick="handleReactionClick(this, event)">❤️</span>
+            <span class="reaction-option" data-label="Frustrating" data-emoji="😤" data-cid="29" onclick="handleReactionClick(this, event)">😤</span>
+            <span class="reaction-option" data-label="Killed me" data-emoji="💀" data-cid="29" onclick="handleReactionClick(this, event)">💀</span>
+            <span class="reaction-option" data-label="Not alone" data-emoji="🫂" data-cid="29" onclick="handleReactionClick(this, event)">🫂</span>
+            <span class="reaction-option" data-label="Too real" data-emoji="😂" data-cid="29" onclick="handleReactionClick(this, event)">😂</span>
+          </div>
+          <span id="like-emoji-29">❤️</span> Relate
+        </button>
         <button class="act act-comment" onclick="toggleComments(29)">💬 Comment</button>
         <button class="act act-share" onclick="openShare(29)">↗ Share</button>
       </div>
@@ -2206,10 +2516,19 @@ body {
       <div class="reactions">
         <span class="reaction-emojis">❤️🌱🫂</span>
         <span class="like-count" id="likes-30">4.3k</span>
-        · <span id="comment-count-30">0</span> comments
+        · <button onclick="toggleComments(30)" style="font-family:\'Inter\',sans-serif;background:none;border:none;cursor:pointer;font-size:12px;color:var(--ink-faint);padding:0;font-weight:300;"><span id="comment-count-30">0</span> comments</button>
       </div>
       <div class="actions">
-        <button class="act act-like" onclick="toggleLike(30, this)">👍 Relate</button>
+        <button class="act act-like" id="like-btn-30" onmouseenter="showPicker(30)" onmouseleave="hidePicker(30)" onclick="handleLikeClick(30)" ontouchstart="handleTouchStart(30, event)" ontouchend="handleTouchEnd(30, event)">
+          <div class="reaction-picker" id="picker-30" onmouseenter="keepPicker(30)" onmouseleave="hidePicker(30)">
+            <span class="reaction-option" data-label="Relatable" data-emoji="❤️" data-cid="30" onclick="handleReactionClick(this, event)">❤️</span>
+            <span class="reaction-option" data-label="Frustrating" data-emoji="😤" data-cid="30" onclick="handleReactionClick(this, event)">😤</span>
+            <span class="reaction-option" data-label="Killed me" data-emoji="💀" data-cid="30" onclick="handleReactionClick(this, event)">💀</span>
+            <span class="reaction-option" data-label="Not alone" data-emoji="🫂" data-cid="30" onclick="handleReactionClick(this, event)">🫂</span>
+            <span class="reaction-option" data-label="Too real" data-emoji="😂" data-cid="30" onclick="handleReactionClick(this, event)">😂</span>
+          </div>
+          <span id="like-emoji-30">❤️</span> Relate
+        </button>
         <button class="act act-comment" onclick="toggleComments(30)">💬 Comment</button>
         <button class="act act-share" onclick="openShare(30)">↗ Share</button>
       </div>
@@ -2376,13 +2695,17 @@ async function initCounts() {
   const cardIds = Array.from(cards).map(c => parseInt(c.dataset.card));
 
   // Fetch all likes
-  const { data: likesData } = await sb.from('likes').select('card_id, session_id');
+  const { data: likesData } = await sb.from('likes').select('card_id, session_id, reaction');
   const likesByCard = {};
   const myLikes = new Set();
+  const savedReactions = {};
   if (likesData) {
     likesData.forEach(l => {
       likesByCard[l.card_id] = (likesByCard[l.card_id] || 0) + 1;
-      if (l.session_id === SESSION_ID) myLikes.add(l.card_id);
+      if (l.session_id === SESSION_ID) {
+        myLikes.add(l.card_id);
+        savedReactions[l.card_id] = l.reaction || '❤️';
+      }
     });
   }
 
@@ -2406,38 +2729,115 @@ async function initCounts() {
       const total = (baseLikes[cid] || 0) + (likesByCard[cid] || 0);
       likeEl.textContent = total >= 1000 ? (total/1000).toFixed(1) + 'k' : total.toString();
     }
-    if (countEl) countEl.textContent = commentsByCard[cid] || 0;
-    if (btn && myLikes.has(cid)) btn.classList.add('liked');
+    if (countEl) {
+      const n = commentsByCard[cid] || 0;
+      const btn = countEl.closest ? countEl.closest('button') : null;
+      countEl.textContent = n;
+    }
+    if (btn && myLikes.has(cid)) {
+      btn.classList.add('liked');
+      // Restore saved reaction
+      const savedReaction = savedReactions[cid];
+      const emojiEl = document.getElementById('like-emoji-' + cid);
+      if (savedReaction && emojiEl) emojiEl.textContent = savedReaction;
+    }
   });
 }
 initCounts();
 
-// ── LIKE ──
-async function toggleLike(cid, btn) {
-  const isLiked = btn.classList.contains('liked');
+// ── REACTION PICKER ──
+const pickerTimers = {};
+
+function showPicker(cid) {
+  clearTimeout(pickerTimers[cid]);
+  const picker = document.getElementById('picker-' + cid);
+  if (picker) picker.classList.add('visible');
+}
+function keepPicker(cid) {
+  clearTimeout(pickerTimers[cid]);
+}
+function hidePicker(cid) {
+  pickerTimers[cid] = setTimeout(() => {
+    const picker = document.getElementById('picker-' + cid);
+    if (picker) picker.classList.remove('visible');
+  }, 200);
+}
+
+function handleReactionClick(el, event) {
+  event.stopPropagation();
+  const cid = parseInt(el.dataset.cid);
+  const emoji = el.dataset.emoji;
+  selectReaction(cid, emoji, event);
+}
+
+async function selectReaction(cid, emoji, event) {
+  if (event) event.stopPropagation();
+  hidePicker(cid);
+  const btn = document.getElementById('like-btn-' + cid);
+  const emojiEl = document.getElementById('like-emoji-' + cid);
   const likeEl = document.getElementById('likes-' + cid);
+  const isLiked = btn.classList.contains('liked');
   const cur = parseFloat(likeEl.textContent) * (likeEl.textContent.includes('k') ? 1000 : 1);
 
   if (isLiked) {
-    btn.classList.remove('liked');
-    likeEl.textContent = formatCount(Math.max(0, cur - 1));
-    await sb.from('likes').delete().eq('card_id', cid).eq('session_id', SESSION_ID);
+    // Switch reaction only
+    if (emojiEl && emojiEl.textContent === emoji) return; // same emoji, do nothing
+    await sb.from('likes').update({ reaction: emoji }).eq('card_id', cid).eq('session_id', SESSION_ID);
   } else {
+    // New like
     btn.classList.add('liked');
     likeEl.textContent = formatCount(cur + 1);
-    await sb.from('likes').insert({ card_id: cid, session_id: SESSION_ID });
+    await sb.from('likes').insert({ card_id: cid, session_id: SESSION_ID, reaction: emoji });
+  }
 
-    // Heart float animation
-    btn.classList.remove('pop');
-    void btn.offsetWidth;
-    btn.classList.add('pop');
-    const heart = document.createElement('div');
-    heart.className = 'heart-float';
-    heart.textContent = '❤️';
-    const rect = btn.getBoundingClientRect();
-    heart.style.cssText = 'position:fixed;left:' + (rect.left + rect.width/2 - 10) + 'px;top:' + (rect.top - 10) + 'px;';
-    document.body.appendChild(heart);
-    setTimeout(() => heart.remove(), 800);
+  // Update emoji display
+  if (emojiEl) emojiEl.textContent = emoji;
+
+  // Float animation
+  btn.classList.remove('pop');
+  void btn.offsetWidth;
+  btn.classList.add('pop');
+  const floatEl = document.createElement('div');
+  floatEl.className = 'heart-float';
+  floatEl.textContent = emoji;
+  const rect = btn.getBoundingClientRect();
+  floatEl.style.cssText = 'position:fixed;left:' + (rect.left + rect.width/2 - 10) + 'px;top:' + (rect.top - 10) + 'px;font-size:20px;';
+  document.body.appendChild(floatEl);
+  setTimeout(() => floatEl.remove(), 800);
+}
+
+// ── LIKE CLICK HANDLER ──
+async function handleLikeClick(cid) {
+  const btn = document.getElementById('like-btn-' + cid);
+  if (btn.classList.contains('liked')) {
+    // Unlike
+    btn.classList.remove('liked');
+    const likeEl = document.getElementById('likes-' + cid);
+    const cur = parseFloat(likeEl.textContent) * (likeEl.textContent.includes('k') ? 1000 : 1);
+    likeEl.textContent = formatCount(Math.max(0, cur - 1));
+    const emojiEl = document.getElementById('like-emoji-' + cid);
+    if (emojiEl) { emojiEl.textContent = '❤️'; emojiEl.style.display = 'inline'; emojiEl.style.marginRight = ''; }
+    await sb.from('likes').delete().eq('card_id', cid).eq('session_id', SESSION_ID);
+  } else {
+    // Quick like with default ❤️ (desktop fallback, mobile short tap)
+    await selectReaction(cid, '❤️');
+  }
+}
+
+// ── MOBILE LONG PRESS ──
+const touchTimers = {};
+function handleTouchStart(cid, e) {
+  touchTimers[cid] = setTimeout(() => {
+    e.preventDefault();
+    showPicker(cid);
+    // Auto hide after 4s if no selection
+    setTimeout(() => hidePicker(cid), 4000);
+  }, 500);
+}
+function handleTouchEnd(cid, e) {
+  if (touchTimers[cid]) {
+    clearTimeout(touchTimers[cid]);
+    delete touchTimers[cid];
   }
 }
 
@@ -2500,15 +2900,34 @@ async function submitComment(cid) {
   }
 }
 
+function getCommentAvatar(createdAt) {
+  const colors = [
+    { bg: '#f5e8e8', color: '#7a2020' },
+    { bg: '#e5edf8', color: '#1e3f6e' },
+    { bg: '#e5f0e8', color: '#1e5229' },
+    { bg: '#eeebfa', color: '#3b2b8a' },
+    { bg: '#f7ede0', color: '#7a4410' },
+    { bg: '#fde8f4', color: '#7a205c' },
+    { bg: '#e8f5f5', color: '#1e5f5f' },
+  ];
+  const initials = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'R', 'S', 'T'];
+  const hash = createdAt ? createdAt.charCodeAt(8) + createdAt.charCodeAt(12) : 0;
+  const color = colors[hash % colors.length];
+  const initial = initials[hash % initials.length];
+  return { ...color, initial };
+}
+
 function renderComments(cid, comments) {
   const list = document.getElementById('comment-list-' + cid);
   if (!list) return;
-  list.innerHTML = comments.map(c => `
+  list.innerHTML = comments.map(c => {
+    const av = getCommentAvatar(c.created_at);
+    return `
     <div class="comment-item">
-      <div class="comment-av">ME</div>
+      <div class="comment-av" style="background:${av.bg};color:${av.color};font-size:10px;font-weight:600;">${av.initial}</div>
       <div class="comment-bubble">${c.content}</div>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
 }
 
 // ── SHARE / SCREENSHOT MODE ──
