@@ -368,58 +368,7 @@ body {
 }
 .reaction-option:hover::after { opacity: 1; }
 /* ── BACK TO TOP ── */
-.back-to-top {
-  position: fixed;
-  bottom: 24px;
-  right: 20px;
-  width: 40px;
-  height: 40px;
-  border-radius: 100px;
-  background: var(--white);
-  color: var(--ink-mid);
-  border: 1px solid var(--border);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0px;
-  font-size: 16px;
-  opacity: 0;
-  pointer-events: none;
-  overflow: hidden;
-  transition: opacity 0.2s, box-shadow 0.2s, width 0.3s ease, gap 0.3s ease, padding 0.3s ease, background 0.2s;
-  z-index: 99;
-  box-shadow: 0 2px 12px rgba(28,27,25,0.1);
-}
-.back-to-top.visible {
-  opacity: 1;
-  pointer-events: auto;
-}
-.back-to-top:hover {
-  width: 120px;
-  padding: 0 16px;
-  gap: 6px;
-  box-shadow: 0 4px 20px rgba(28,27,25,0.15);
-  background: var(--cream);
-}
-.btt-label {
-  font-family: 'Inter', sans-serif;
-  font-size: 12px;
-  font-weight: 400;
-  white-space: nowrap;
-  opacity: 0;
-  max-width: 0;
-  overflow: hidden;
-  transition: opacity 0.25s ease, max-width 0.3s ease;
-}
-.back-to-top:hover .btt-label {
-  opacity: 1;
-  max-width: 100px;
-}
-@media (max-width: 480px) {
-  .back-to-top:hover { width: 40px; padding: 0; gap: 0; }
-  .back-to-top:hover .btt-label { opacity: 0; max-width: 0; }
-}
+/* back-to-top handled inline */
 
 /* ── LIKE ANIMATION ── */
 @keyframes likePopIn {
@@ -442,7 +391,54 @@ body {
   z-index: 999;
 }
 
+/* ── SKELETON LOADING ── */
+@keyframes shimmer {
+  0% { background-position: -600px 0; }
+  100% { background-position: 600px 0; }
+}
+.skeleton-card {
+  background: var(--white);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  padding: 18px 20px;
+  margin-bottom: 14px;
+}
+.skeleton-line {
+  border-radius: 6px;
+  background: linear-gradient(90deg, #ede9e2 25%, #f5f4f2 50%, #ede9e2 75%);
+  background-size: 600px 100%;
+  animation: shimmer 1.4s infinite;
+}
+.sk-header { display: flex; gap: 12px; margin-bottom: 16px; }
+.sk-avatar { width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0; }
+.sk-meta { flex: 1; display: flex; flex-direction: column; gap: 6px; padding-top: 4px; }
+.sk-name { height: 13px; width: 40%; }
+.sk-title { height: 11px; width: 65%; }
+.sk-body { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.sk-text-full { height: 12px; width: 100%; }
+.sk-text-wide { height: 12px; width: 85%; }
+.sk-text-short { height: 12px; width: 60%; }
+.sk-milestone { height: 72px; border-radius: 10px; margin-bottom: 14px; }
+.sk-pills { display: flex; gap: 6px; margin-bottom: 14px; }
+.sk-pill { height: 28px; width: 100px; border-radius: 100px; }
+.sk-pill-sm { width: 80px; }
+
+#skeleton-feed {
+  display: none;
+  position: fixed;
+  inset: 0;
+  top: 58px;
+  background: var(--cream);
+  z-index: 98;
+  overflow-y: auto;
+  padding: 20px 16px 40px;
+}
+#skeleton-feed.visible { display: block; }
+#skeleton-feed .skeleton-card { max-width: 620px; margin: 0 auto 14px; }
+
 .divider { display: flex; align-items: center; gap: 12px; margin: 6px 0 18px; }
+
+
 .divider-line { flex: 1; height: 1px; background: var(--border); }
 .divider-text { font-size: 11px; color: var(--ink-faint); white-space: nowrap; font-size: 12px; font-weight: 400; letter-spacing: 0.02em; }
 
@@ -521,16 +517,17 @@ body {
 
 <div class="layout">
 
-  <div class="banner">
+  <div class="banner" id="welcome-banner" style="position:relative;flex-direction:column;align-items:flex-start;">
+    <button onclick="closeBanner()" style="position:absolute;top:10px;right:12px;background:none;border:none;color:rgba(255,255,255,0.35);cursor:pointer;font-size:14px;padding:4px;line-height:1;transition:color 0.15s;" onmouseover="this.style.color='rgba(255,255,255,0.9)'" onmouseout="this.style.color='rgba(255,255,255,0.35)'">✕</button>
     <div class="banner-text">
-      <strong>Welcome to RealIn.</strong><br class="banner-br"> <span class="banner-inline">LinkedIn shows the highlight reel. We show the cost of getting there.</span>
+      <strong>Welcome to RealIn.</strong><br>LinkedIn shows the highlight reel. We show the cost of getting there.
     </div>
-    <div class="badge">No humblebrag zone</div>
+    <div class="badge" style="margin-top:12px;">No humblebrag zone</div>
   </div>
 
   <div class="composer">
     <div class="comp-av" style="display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;color:#9A9690;">ME</div>
-    <input class="comp-input" id="compose-input" placeholder="What's the real story behind your milestone?" readonly style="cursor:pointer;" />
+    <input class="comp-input" id="compose-input" placeholder="What's the real story behind your milestone?" style="cursor:pointer;" onfocus="openSubmitForm();this.blur();" />
   </div>
 
   <div class="section-label">Recent confessions</div>
@@ -2570,10 +2567,80 @@ body {
   </div>
 
 </div>
+<div id="skeleton-feed">
+
+  <div class="skeleton-card">
+    <div class="sk-header">
+      <div class="skeleton-line sk-avatar"></div>
+      <div class="sk-meta">
+        <div class="skeleton-line sk-name"></div>
+        <div class="skeleton-line sk-title"></div>
+      </div>
+    </div>
+    <div class="sk-body">
+      <div class="skeleton-line sk-text-full"></div>
+      <div class="skeleton-line sk-text-wide"></div>
+      <div class="skeleton-line sk-text-short"></div>
+    </div>
+    <div class="skeleton-line sk-milestone"></div>
+    <div class="sk-pills">
+      <div class="skeleton-line sk-pill"></div>
+      <div class="skeleton-line sk-pill sk-pill-sm"></div>
+      <div class="skeleton-line sk-pill"></div>
+    </div>
+  </div>
+
+  <div class="skeleton-card">
+    <div class="sk-header">
+      <div class="skeleton-line sk-avatar"></div>
+      <div class="sk-meta">
+        <div class="skeleton-line sk-name"></div>
+        <div class="skeleton-line sk-title"></div>
+      </div>
+    </div>
+    <div class="sk-body">
+      <div class="skeleton-line sk-text-full"></div>
+      <div class="skeleton-line sk-text-wide"></div>
+      <div class="skeleton-line sk-text-short"></div>
+    </div>
+    <div class="skeleton-line sk-milestone"></div>
+    <div class="sk-pills">
+      <div class="skeleton-line sk-pill"></div>
+      <div class="skeleton-line sk-pill sk-pill-sm"></div>
+      <div class="skeleton-line sk-pill"></div>
+    </div>
+  </div>
+
+  <div class="skeleton-card">
+    <div class="sk-header">
+      <div class="skeleton-line sk-avatar"></div>
+      <div class="sk-meta">
+        <div class="skeleton-line sk-name"></div>
+        <div class="skeleton-line sk-title"></div>
+      </div>
+    </div>
+    <div class="sk-body">
+      <div class="skeleton-line sk-text-full"></div>
+      <div class="skeleton-line sk-text-wide"></div>
+      <div class="skeleton-line sk-text-short"></div>
+    </div>
+    <div class="skeleton-line sk-milestone"></div>
+    <div class="sk-pills">
+      <div class="skeleton-line sk-pill"></div>
+      <div class="skeleton-line sk-pill sk-pill-sm"></div>
+      <div class="skeleton-line sk-pill"></div>
+    </div>
+  </div>
+</div>
+
 
 <div class="toast" id="toast">Copied!</div>
 
-<div style="text-align:center;padding:40px 20px 60px;border-top:1px solid rgba(28,27,25,0.08);background:rgba(247,244,239,0.6);">
+<div style="display:flex;justify-content:center;padding:12px 0 0;">
+  <button id="back-to-top" onclick="refreshFeed()" style="position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink);color:white;border:none;border-radius:100px;padding:10px 22px;font-family:'Inter',sans-serif;font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:0 4px 20px rgba(28,27,25,0.2);opacity:0;pointer-events:none;transition:opacity 0.3s ease, transform 0.3s ease, background 0.15s;z-index:99;white-space:nowrap;">↑ New stories</button>
+</div>
+
+<div style="text-align:center;padding:40px 20px 100px;border-top:1px solid rgba(28,27,25,0.08);background:rgba(247,244,239,0.6);">
   <div style="font-family:'Inter',sans-serif;font-size:15px;font-weight:800;color:#1C1B19;margin-bottom:10px;letter-spacing:-0.3px;">Real<span style="color:#B83232;">In</span></div>
   <div style="font-family:'Inter',sans-serif;font-size:12px;color:#9A9690;line-height:1.8;margin-bottom:20px;max-width:340px;margin-left:auto;margin-right:auto;">
     All characters, companies, and situations depicted are entirely fictional. Any resemblance to real persons or workplaces is purely coincidental — and deeply unsurprising.
@@ -2635,10 +2702,7 @@ body {
 </div>
 
 
-<button class="back-to-top" id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
-  <span class="btt-arrow">↑</span>
-  <span class="btt-label">Back to top</span>
-</button>
+
 
 <!-- Share menu -->
 <div id="share-menu" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(28,27,25,0.5);align-items:center;justify-content:center;" onclick="closeShareMenu(event)">
@@ -2700,13 +2764,29 @@ const SUPABASE_KEY = 'sb_publishable_vdcRoKkpEw_lI7Zg6BWV5w_oUNEzeUD';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ── SESSION ID (anonymous user identifier) ──
-function getSessionId() {
-  let sid = localStorage.getItem('reatin_session');
-  if (!sid) {
-    sid = crypto.randomUUID();
-    localStorage.setItem('reatin_session', sid);
+function generateId() {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+    return crypto.randomUUID();
   }
-  return sid;
+  // Fallback for Line/FB browser
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    const r = Math.random() * 16 | 0;
+    const v = c === 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+function getSessionId() {
+  try {
+    let sid = localStorage.getItem('reatin_session');
+    if (!sid) {
+      sid = generateId();
+      localStorage.setItem('reatin_session', sid);
+    }
+    return sid;
+  } catch(e) {
+    // localStorage blocked (e.g. private browsing in some browsers)
+    return generateId();
+  }
 }
 const SESSION_ID = getSessionId();
 
@@ -3074,6 +3154,29 @@ function shuffleCards() {
 document.addEventListener('DOMContentLoaded', shuffleCards);
 if (document.readyState !== 'loading') shuffleCards();
 
+// ── WELCOME BANNER ──
+function closeBanner() {
+  const banner = document.getElementById('welcome-banner');
+  if (banner) {
+    banner.style.transition = 'opacity 0.3s ease, max-height 0.4s ease, margin 0.4s ease, padding 0.4s ease';
+    banner.style.opacity = '0';
+    banner.style.maxHeight = '0';
+    banner.style.marginBottom = '0';
+    banner.style.padding = '0';
+    banner.style.overflow = 'hidden';
+    setTimeout(() => { banner.style.display = 'none'; }, 400);
+  }
+  try { localStorage.setItem('banner_closed', '1'); } catch(e) {}
+}
+
+// Check if banner was previously closed
+try {
+  if (localStorage.getItem('banner_closed') === '1') {
+    const banner = document.getElementById('welcome-banner');
+    if (banner) banner.style.display = 'none';
+  }
+} catch(e) {}
+
 // ── COMPOSE INPUT ──
 document.getElementById('compose-input').addEventListener('click', openSubmitForm);
 
@@ -3112,13 +3215,76 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // ── BACK TO TOP ──
-window.addEventListener('scroll', () => {
-  const btn = document.getElementById('back-to-top');
-  if (btn) {
-    if (window.scrollY > 400) btn.classList.add('visible');
-    else btn.classList.remove('visible');
+function refreshFeed() {
+  const btt = document.getElementById('back-to-top');
+  const layout = document.querySelector('.layout');
+  const skeleton = document.getElementById('skeleton-feed');
+
+  // Hide button and lock observer
+  if (btt) {
+    btt.style.opacity = '0';
+    btt.style.pointerEvents = 'none';
+    btt.style.transform = 'translateX(-50%) translateY(80px)';
   }
-});
+  observerLocked = true;
+
+  // Scroll to top smoothly
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  setTimeout(() => {
+    // Hide real cards, show skeleton
+    if (layout) layout.style.opacity = '0';
+    if (skeleton) skeleton.classList.add('visible');
+
+    setTimeout(() => {
+      // Shuffle while skeleton showing
+      shuffleCards();
+      initCounts();
+
+      // Hide skeleton, reveal real cards
+      setTimeout(() => {
+        if (skeleton) skeleton.classList.remove('visible');
+        if (layout) {
+          layout.style.transition = 'opacity 0.4s ease';
+          layout.style.opacity = '1';
+          setTimeout(() => { layout.style.transition = ''; }, 400);
+        }
+        setTimeout(() => {
+          observeLastCard();
+          setTimeout(() => { observerLocked = false; }, 800);
+        }, 400);
+      }, 700);
+    }, 300);
+  }, 500);
+}
+
+// Show New stories button when last nina card visible
+let observerLocked = false;
+const lastCardObserver = new IntersectionObserver((entries) => {
+  if (observerLocked) return;
+  entries.forEach(entry => {
+    const btn = document.getElementById('back-to-top');
+    if (!btn) return;
+    if (entry.isIntersecting) {
+      btn.style.opacity = '1';
+      btn.style.transform = 'translateX(-50%) translateY(0)';
+      btn.style.pointerEvents = 'auto';
+    }
+  });
+}, { threshold: 0.5 });
+
+function observeLastCard() {
+  const ninaCards = Array.from(document.querySelectorAll('.card')).filter(
+    card => card.querySelector('.card-nina-footer') && card.style.display !== 'none'
+  );
+  if (ninaCards.length > 0) {
+    lastCardObserver.disconnect();
+    lastCardObserver.observe(ninaCards[ninaCards.length - 1]);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => setTimeout(observeLastCard, 300));
+if (document.readyState !== 'loading') setTimeout(observeLastCard, 300);
 
 function showToast(msg) {
   const t = document.getElementById('toast');
