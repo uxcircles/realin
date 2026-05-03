@@ -443,7 +443,6 @@ body {
 .divider-text { font-size: 11px; color: var(--ink-faint); white-space: nowrap; font-size: 12px; font-weight: 400; letter-spacing: 0.02em; }
 
 /* ── INTERACTION ── */
-.act-like.liked { color: var(--red); }
 .like-count { font-variant-numeric: tabular-nums; }
 
 .comment-section { display: none; border-top: 1px solid var(--border); background: rgba(247,244,239,0.5); }
@@ -518,7 +517,7 @@ body {
 <div class="layout">
 
   <div class="banner" id="welcome-banner" style="position:relative;flex-direction:column;align-items:flex-start;">
-    <button onclick="closeBanner()" style="position:absolute;top:10px;right:12px;background:none;border:none;color:rgba(255,255,255,0.35);cursor:pointer;font-size:14px;padding:4px;line-height:1;transition:color 0.15s;" onmouseover="this.style.color='rgba(255,255,255,0.9)'" onmouseout="this.style.color='rgba(255,255,255,0.35)'">✕</button>
+    <button onclick="closeBanner()" aria-label="Close banner" style="position:absolute;top:10px;right:12px;background:none;border:none;color:rgba(255,255,255,0.35);cursor:pointer;font-size:14px;padding:4px;line-height:1;transition:color 0.15s;" onmouseover="this.style.color='rgba(255,255,255,0.9)'" onmouseout="this.style.color='rgba(255,255,255,0.35)'">✕</button>
     <div class="banner-text">
       <strong>Welcome to RealIn.</strong><br>LinkedIn shows the highlight reel. We show the cost of getting there.
     </div>
@@ -3426,9 +3425,9 @@ body {
 
 <!-- Submission form modal -->
 <div id="submit-overlay" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(28,27,25,0.5);align-items:center;justify-content:center;padding:20px;" onclick="closeSubmitForm(event)">
-  <div style="background:#FDFCFA;border-radius:20px;padding:28px 24px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;">
+  <div role="dialog" aria-modal="true" aria-labelledby="submit-modal-title" style="background:#FDFCFA;border-radius:20px;padding:28px 24px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;">
     <div style="margin-bottom:20px;">
-      <div style="font-family:'Inter',sans-serif;font-size:18px;font-weight:700;color:#1C1B19;margin-bottom:6px;">Share your truth</div>
+      <div id="submit-modal-title" style="font-family:'Inter',sans-serif;font-size:18px;font-weight:700;color:#1C1B19;margin-bottom:6px;">Share your truth</div>
       <div style="font-family:'Inter',sans-serif;font-size:13px;color:#9A9690;line-height:1.6;">Your story will be anonymised before publishing. We'll rewrite it to protect your identity — but keep the truth intact.</div>
     </div>
 
@@ -3449,7 +3448,7 @@ body {
       </div>
 
       <div style="background:#F7F4EF;border-radius:10px;padding:12px 14px;margin-bottom:20px;display:flex;gap:10px;align-items:flex-start;">
-        <span style="font-size:16px;flex-shrink:0;">🔒</span>
+        <span role="img" aria-label="Anonymous" style="font-size:16px;flex-shrink:0;">🔒</span>
         <div style="font-family:'Inter',sans-serif;font-size:12px;color:#9A9690;line-height:1.6;">Your submission is anonymous. We'll rewrite names, companies, and identifying details before publishing. You'll be in good company.</div>
       </div>
 
@@ -3473,7 +3472,7 @@ body {
 
 <!-- Share menu -->
 <div id="share-menu" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(28,27,25,0.5);align-items:center;justify-content:center;" onclick="closeShareMenu(event)">
-  <div id="share-sheet" style="background:#FDFCFA;border-radius:20px;padding:24px 20px 28px;width:100%;max-width:420px;margin:20px;">
+  <div id="share-sheet" role="dialog" aria-modal="true" aria-label="Share this post" style="background:#FDFCFA;border-radius:20px;padding:24px 20px 28px;width:100%;max-width:420px;margin:20px;">
     <div style="display:none;" class="drag-handle"></div>
     <div style="font-size:13px;font-weight:500;color:#9A9690;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:16px;">Share this post</div>
     <button onclick="chooseScreenshot()" style="font-family:inherit;display:flex;align-items:center;gap:14px;width:100%;background:none;border:1px solid #E8E6E2;border-radius:14px;padding:14px 18px;cursor:pointer;margin-bottom:10px;text-align:left;">
@@ -3562,7 +3561,11 @@ const baseLikes = {};
 document.querySelectorAll('[data-card]').forEach(card => {
   const cid = card.dataset.card;
   const el = document.getElementById('likes-' + cid);
-  if (el) baseLikes[cid] = parseInt(el.textContent.replace(/,/g,'').replace(/k/,'000')) || 0;
+  if (el) {
+    const raw = el.textContent.trim();
+    const kMatch = raw.match(/^([\d.]+)k$/i);
+    baseLikes[cid] = kMatch ? Math.round(parseFloat(kMatch[1]) * 1000) : (parseInt(raw.replace(/,/g,'')) || 0);
+  }
 });
 
 // ── INIT: load likes and comments from Supabase ──
@@ -3753,6 +3756,15 @@ async function submitComment(cid) {
   const input = document.getElementById('comment-input-' + cid);
   const text = input.value.trim();
   if (!text) return;
+  if (text.length > 500) {
+    input.style.borderColor = '#B83232';
+    input.placeholder = 'Please keep it under 500 characters 🙏';
+    setTimeout(() => {
+      input.style.borderColor = '';
+      input.placeholder = 'Add a comment...';
+    }, 2500);
+    return;
+  }
   if (containsProfanity(text)) {
     input.style.borderColor = '#B83232';
     input.placeholder = 'Please keep it respectful 🙏';
@@ -3793,6 +3805,12 @@ function getCommentAvatar(createdAt) {
   return { ...color, initial };
 }
 
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
 function renderComments(cid, comments) {
   const list = document.getElementById('comment-list-' + cid);
   if (!list) return;
@@ -3801,7 +3819,7 @@ function renderComments(cid, comments) {
     return `
     <div class="comment-item">
       <div class="comment-av" style="background:${av.bg};color:${av.color};font-size:10px;font-weight:600;">${av.initial}</div>
-      <div class="comment-bubble">${c.content}</div>
+      <div class="comment-bubble">${escapeHtml(c.content)}</div>
     </div>`;
   }).join('');
 }
